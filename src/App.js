@@ -40,7 +40,8 @@ export default class DoubleDatePickerCalender extends React.Component {
             12: "December"
         };
         this.state = {
-            monthMarkup: this.monthCreater(this.month, this.year) //create month for current month for initial rendering
+            monthMarkup: this.monthCreater(this.month, this.year), //create month for current month for initial rendering
+            popperShow: false
         }
     }
     /**
@@ -610,8 +611,8 @@ export default class DoubleDatePickerCalender extends React.Component {
             endDate: ""
         };
         this.selectedDateWithDateFormatObj = {
-            startDate: "",
-            endDate: ""
+            startDate: this.props.inputFieldStartDateText || "",
+            endDate: this.props.inputFieldEndDateText || ""
         };
         this.calenderHandler(this.todayDateObj.month, this.todayDateObj.year);
         this.date = this.todayDateObj.date;
@@ -648,51 +649,79 @@ export default class DoubleDatePickerCalender extends React.Component {
         return _date;
     }
 
+    documentEventHandler = (event) => {
+        if (event.target.className.search(/\bdate-picker-calender-input-field\b/i) !== -1) {
+            document.removeEventListener("click", this.documentEventHandler);
+            return null;
+        }
+        if (document.getElementsByClassName('date-picker-calender-popper')[0].contains(event.target) === false) {
+            this.setState({
+                popperShow: false
+            });
+            document.removeEventListener("click", this.documentEventHandler);
+        }
+    }
+    popperVisibilityHandler = (event) => {
+        this.setState({
+            popperShow: !this.state.popperShow
+        }, () => {
+            this.state.popperShow && document.addEventListener("click", this.documentEventHandler);
+        });
+    }
 
     render() {
         return (
             <div className="date-picker-calender-wrapper">
                 <div className="date-picker-calender-input-wrapper">
-                    <input type="text" name="selected-dates" value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol} ${this.selectedDateWithDateFormatObj.endDate}`} readOnly />
+                    <input
+                        type="text"
+                        name="selected-dates"
+                        value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol} ${this.selectedDateWithDateFormatObj.endDate}`}
+                        className="date-picker-calender-input-field"
+                        onClick={this.popperVisibilityHandler}
+                        readOnly />
                 </div>
-                <div className="date-picker-calender-popper">
-                    <div className="date-picker-calender-header">
-                        <span
-                            onClick={this.previousMonthBtnHandler}
-                            className="date-picker-calender-previous-btn"> &lt; </span>
-                        <span className="date-picker-calender-month-year-name">
-                            <span className="date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
-                            <span className="date-picker-calender-year-name">{this.year}</span>
-                        </span>
-                        <span
-                            onClick={this.nextMonthBtnHandler}
-                            className="date-picker-calender-next-btn">&gt; </span>
-                    </div>
-                    <div className="date-picker-calender-body">
-                        <div className="date-picker-calender-day-name-wrapper">
-                            {this.daysNameCreater()}
-                        </div>
-                        <div className="date-picker-calender-month-wrapper" onClick={this.dateSelectionHandler}>
-                            {this.state.monthMarkup}
-                        </div>
-                    </div>
-                    {
-                        (!this.props.hideResetButton || !this.props.hideApplyButton) &&
-                        (<div className="date-picker-calender-footer">
+                {
+                    this.state.popperShow && (
+                        <div className="date-picker-calender-popper">
+                            <div className="date-picker-calender-header">
+                                <span
+                                    onClick={this.previousMonthBtnHandler}
+                                    className="date-picker-calender-previous-btn"> &lt; </span>
+                                <span className="date-picker-calender-month-year-name">
+                                    <span className="date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
+                                    <span className="date-picker-calender-year-name">{this.year}</span>
+                                </span>
+                                <span
+                                    onClick={this.nextMonthBtnHandler}
+                                    className="date-picker-calender-next-btn">&gt; </span>
+                            </div>
+                            <div className="date-picker-calender-body">
+                                <div className="date-picker-calender-day-name-wrapper">
+                                    {this.daysNameCreater()}
+                                </div>
+                                <div className="date-picker-calender-month-wrapper" onClick={this.dateSelectionHandler}>
+                                    {this.state.monthMarkup}
+                                </div>
+                            </div>
                             {
-                                !this.props.hideResetButton && (<div className="date-picker-calender-reset-button" onClick={this.resetCalender}>
-                                    <span>{this.props.resetBtnText || "Reset"}</span>
-                                </div>)
+                                (!this.props.hideResetButton || !this.props.hideApplyButton) &&
+                                (<div className="date-picker-calender-footer">
+                                    {
+                                        !this.props.hideResetButton && (<div className="date-picker-calender-reset-button" onClick={this.resetCalender}>
+                                            <span>{this.props.resetBtnText || "Reset"}</span>
+                                        </div>)
+                                    }
+                                    {
+                                        !this.props.hideApplyButton && (<div className="date-picker-calender-apply-button" onClick={this.applyCalender}>
+                                            <span>{this.props.applyBtnText || "Apply"}</span>
+                                        </div>)
+                                    }
+                                </div>
+                                )
                             }
-                            {
-                                !this.props.hideApplyButton && (<div className="date-picker-calender-apply-button" onClick={this.applyCalender}>
-                                    <span>{this.props.applyBtnText || "Apply"}</span>
-                                </div>)
-                            }
-                        </div>
-                        )
-                    }
-                </div>
+                        </div>)
+                }
             </div>
         );
     }
