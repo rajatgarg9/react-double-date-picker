@@ -1,4 +1,9 @@
 .date-picker-calender {
+    %disable{
+        pointer-events: none;
+        background-color: lightgrey;
+        font-weight: 300;
+    }
   &-popper {
       background-color: white;
       width: 300px;
@@ -59,6 +64,9 @@
       background-color: #dcdcdc;
       font-weight: 600;
   }
+  &-current-month-day-disabled{
+    @extend %disable;
+  }
   &-outside-month-day {
       visibility: hidden;
   }
@@ -91,6 +99,9 @@
       font-weight: 700;
       border-radius: 12px;
       margin: 0 20px;
+  }
+  &-apply-button-disabled{
+      @extend %disable;
   }
 }
 *{

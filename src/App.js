@@ -5,7 +5,7 @@ import './App.css';
 export default class DoubleDatePickerCalender extends React.Component {
 
     constructor(props) {
-        super();
+        super(props);
         const dateObj = new Date();
         this.date = dateObj.getDate(); // get date (0-31)
         this.month = dateObj.getMonth() + 1; // get month (1-12)
@@ -41,7 +41,7 @@ export default class DoubleDatePickerCalender extends React.Component {
         };
         this.state = {
             monthMarkup: this.monthCreater(this.month, this.year), //create month for current month for initial rendering
-            popperShow: false
+            popperShow: props.hideInputField || false
         }
     }
     /**
@@ -145,7 +145,8 @@ export default class DoubleDatePickerCalender extends React.Component {
     insideMonthDateClassHandler = (startDate, firstSelectedDate, secondSelectedDate, hoverMode = 0) => {
         const _insideMonthClass = "date-picker-calender-day date-picker-calender-current-month-day",
             _currentDateClass = "date-picker-calender-today",
-            _dateBetweenFirstSecondSelected = "date-picker-calender-first-second-between-selected";
+            _dateBetweenFirstSecondSelected = "date-picker-calender-first-second-between-selected",
+            _disabledDateClass="date-picker-calender-current-month-day-disabled";
         let _secondSelectedDateClass = "date-picker-calender-second-date-selected",
             _firstSelectedDateClass = "date-picker-calender-first-date-selected";
 
@@ -157,6 +158,10 @@ export default class DoubleDatePickerCalender extends React.Component {
                 _firstSelectedDateClass = "date-picker-calender-first-second-between-selected";
             }
 
+        }
+        
+        if (this.props.disabledPreviousDates && this.dateComparator(startDate, this.todayDateObj, "<")) {
+            return `${_insideMonthClass} ${_disabledDateClass}`;
         }
 
         if (!firstSelectedDate && !secondSelectedDate && startDate.date === this.todayDateObj.date && this.dateComparator(startDate, this.todayDateObj, "===")) {
@@ -672,15 +677,17 @@ export default class DoubleDatePickerCalender extends React.Component {
     render() {
         return (
             <div className="date-picker-calender-wrapper">
-                <div className="date-picker-calender-input-wrapper">
-                    <input
-                        type="text"
-                        name="selected-dates"
-                        value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol} ${this.selectedDateWithDateFormatObj.endDate}`}
-                        className="date-picker-calender-input-field"
-                        onClick={this.popperVisibilityHandler}
-                        readOnly />
-                </div>
+                {!this.props.hideInputField &&
+                    (<div className="date-picker-calender-input-wrapper">
+                        <input
+                            type="text"
+                            name="selected-dates"
+                            value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol} ${this.selectedDateWithDateFormatObj.endDate}`}
+                            className="date-picker-calender-input-field"
+                            onClick={this.popperVisibilityHandler}
+                            readOnly />
+                    </div>)
+                }
                 {
                     this.state.popperShow && (
                         <div className="date-picker-calender-popper">
@@ -700,7 +707,9 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 <div className="date-picker-calender-day-name-wrapper">
                                     {this.daysNameCreater()}
                                 </div>
-                                <div className="date-picker-calender-month-wrapper" onClick={this.dateSelectionHandler}>
+                                <div
+                                    className="date-picker-calender-month-wrapper"
+                                    onClick={this.dateSelectionHandler}>
                                     {this.state.monthMarkup}
                                 </div>
                             </div>
@@ -708,12 +717,20 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 (!this.props.hideResetButton || !this.props.hideApplyButton) &&
                                 (<div className="date-picker-calender-footer">
                                     {
-                                        !this.props.hideResetButton && (<div className="date-picker-calender-reset-button" onClick={this.resetCalender}>
+                                        !this.props.hideResetButton &&
+                                        (<div
+                                            className="date-picker-calender-reset-button"
+                                            onClick={this.resetCalender}>
                                             <span>{this.props.resetBtnText || "Reset"}</span>
                                         </div>)
                                     }
                                     {
-                                        !this.props.hideApplyButton && (<div className="date-picker-calender-apply-button" onClick={this.applyCalender}>
+                                        !this.props.hideApplyButton &&
+                                        (<div
+                                            className={(this.selectedDateObj.startDate && this.selectedDateObj.endDate) ?
+                                                "date-picker-calender-apply-button" :
+                                                "date-picker-calender-apply-button date-picker-calender-apply-button-disabled"}
+                                            onClick={this.applyCalender}>
                                             <span>{this.props.applyBtnText || "Apply"}</span>
                                         </div>)
                                     }

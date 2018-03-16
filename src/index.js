@@ -15,5 +15,9 @@ ReactDOM.render(<DoubleDatePickerCalender
      inputFieldEndDateText="End"
      hideResetButton={false}
      hideApplyButton={false}
+     hideInputField={false}
+     applyBtnText="APPLY"
+     resetBtnText="RESET"
+     disabledPreviousDates={true}
      />, document.getElementById('root'));
 registerServiceWorker();
