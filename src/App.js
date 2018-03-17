@@ -131,7 +131,7 @@ export default class DoubleDatePickerCalender extends React.Component {
         const _weekName = this.props.weekName || ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"];
         let _daysNameMarkUp = [];
         for (let i = 1; i <= _weekName.length; i++) {
-            _daysNameMarkUp = [..._daysNameMarkUp, <span className="date-picker-calender-day-name" key={i}>{_weekName[i - 1]}</span>];
+            _daysNameMarkUp = [..._daysNameMarkUp, <span className="double-date-picker-calender-day-name" key={i}>{_weekName[i - 1]}</span>];
         }
         return _daysNameMarkUp;
     };
@@ -144,19 +144,19 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @return {string} -- return class for particular date according to logic
      */
     insideMonthDateClassHandler = (startDate, firstSelectedDate, secondSelectedDate, hoverMode = 0) => {
-        const _insideMonthClass = "date-picker-calender-day date-picker-calender-current-month-day",
-            _currentDateClass = "date-picker-calender-today",
-            _dateBetweenFirstSecondSelected = "date-picker-calender-first-second-between-selected",
-            _disabledDateClass = "date-picker-calender-current-month-day-disabled";
-        let _secondSelectedDateClass = "date-picker-calender-second-date-selected",
-            _firstSelectedDateClass = "date-picker-calender-first-date-selected";
+        const _insideMonthClass = "double-date-picker-calender-day double-date-picker-calender-current-month-day",
+            _currentDateClass = "double-date-picker-calender-today",
+            _dateBetweenFirstSecondSelected = "double-date-picker-calender-first-second-between-selected",
+            _disabledDateClass = "double-date-picker-calender-current-month-day-disabled";
+        let _secondSelectedDateClass = "double-date-picker-calender-second-date-selected",
+            _firstSelectedDateClass = "double-date-picker-calender-first-date-selected";
 
         if (hoverMode) {
             if (hoverMode === 1) {
-                _secondSelectedDateClass = "date-picker-calender-first-second-between-selected";
+                _secondSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
             }
             if (hoverMode === 2) {
-                _firstSelectedDateClass = "date-picker-calender-first-second-between-selected";
+                _firstSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
             }
 
         }
@@ -200,7 +200,7 @@ export default class DoubleDatePickerCalender extends React.Component {
     weekCreater = (startDate, weekPosition, outsideDateRepetition, firstSelectedDate = 0, secondSelectedDate = 0, hoverMode = 0) => {
         let _weekMarkup = [],
             _mouseEvents = {};
-        const _outsideMonthClass = "date-picker-calender-day date-picker-calender-outside-month-day";
+        const _outsideMonthClass = "double-date-picker-calender-day double-date-picker-calender-outside-month-day";
         if ((this.selectedDateObj.startDate && !this.selectedDateObj.endDate) || (!this.selectedDateObj.startDate && this.selectedDateObj.endDate)) {
             _mouseEvents = {
                 onMouseOver: this.dateMouseOverHandler,
@@ -311,18 +311,18 @@ export default class DoubleDatePickerCalender extends React.Component {
             _middleWeekRepetition = (_middleWeekEndDate - (_middleWeekStartDate - 1)) / 7,
             _dynamicWeek;
 
-        _monthMarkup = [(<div className="date-picker-calender-week" key={9}>
+        _monthMarkup = [(<div className="double-date-picker-calender-week" key={9}>
             {this.weekCreater({ date: _previousOutsideMonthStartDate, month, year }, "first", _monthFirstWeekDay - 1, firstSelectedDate, secondSelectedDate, hoverMode)}
         </div>)];
         while (_middleWeekRepetition) {
-            _dynamicWeek = (<div className="date-picker-calender-week" key={_middleWeekRepetition}>
+            _dynamicWeek = (<div className="double-date-picker-calender-week" key={_middleWeekRepetition}>
                 {this.weekCreater({ date: _middleWeekStartDate, month, year }, "middle", 0, firstSelectedDate, secondSelectedDate, hoverMode)}
             </div>);
             _monthMarkup = [..._monthMarkup, _dynamicWeek]
             _middleWeekStartDate = _middleWeekStartDate + 7;
             --_middleWeekRepetition;
         }
-        _dynamicWeek = (<div className="date-picker-calender-week" key={10}>
+        _dynamicWeek = (<div className="double-date-picker-calender-week" key={10}>
             {this.weekCreater({ date: _middleWeekEndDate + 1, month, year }, "last", 7 - _monthLastWeekDay, firstSelectedDate, secondSelectedDate, hoverMode)}
         </div>);
         _monthMarkup = [_monthMarkup, _dynamicWeek];
@@ -443,7 +443,7 @@ export default class DoubleDatePickerCalender extends React.Component {
             month: Number(event.target.dataset["month"]),
             year: Number(event.target.dataset["year"])
         };
-        if (event.target.className.search(/\bdate-picker-calender-current-month-day\b/i) !== -1) {
+        if (event.target.className.search(/\bdouble-date-picker-calender-current-month-day\b/i) !== -1) {
             if (!this.selectedDateObj.startDate) {
                 if (this.selectedDateObj.endDate) {
                     if (this.dateComparator(_selectedDate, this.selectedDateObj.endDate, "<=")) {
@@ -659,11 +659,11 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @return {undefined}
      */
     documentEventHandler = (event) => {
-        if (event.target.className.search(/\bdate-picker-calender-input-field\b/i) !== -1) {
+        if (event.target.className.search(/\bdouble-date-picker-calender-input-field\b/i) !== -1) {
             document.removeEventListener("click", this.documentEventHandler);
             return null;
         }
-        if (document.getElementsByClassName('date-picker-calender-popper')[0].contains(event.target) === false) {
+        if (document.getElementsByClassName('double-date-picker-calender-popper')[0].contains(event.target) === false) {
             this.setState({
                 popperShow: false
             });
@@ -686,50 +686,50 @@ export default class DoubleDatePickerCalender extends React.Component {
 
     render() {
         return (
-            <div className="date-picker-calender-wrapper">
+            <div className="double-date-picker-calender-wrapper">
                 {!this.props.hideInputField &&
-                    (<div className="date-picker-calender-input-wrapper">
+                    (<div className="double-date-picker-calender-input-wrapper">
                         <input
                             type="text"
                             name="selected-dates"
                             value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol} ${this.selectedDateWithDateFormatObj.endDate}`}
-                            className="date-picker-calender-input-field"
+                            className="double-date-picker-calender-input-field"
                             onClick={this.popperVisibilityHandler}
                             readOnly />
                     </div>)
                 }
                 {
                     this.state.popperShow && (
-                        <div className="date-picker-calender-popper">
-                            <div className="date-picker-calender-header">
+                        <div className="double-date-picker-calender-popper">
+                            <div className="double-date-picker-calender-header">
                                 <span
                                     onClick={this.previousMonthBtnHandler}
-                                    className="date-picker-calender-previous-btn"> &lt; </span>
-                                <span className="date-picker-calender-month-year-name">
-                                    <span className="date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
-                                    <span className="date-picker-calender-year-name">{this.year}</span>
+                                    className="double-date-picker-calender-previous-btn"> &lt; </span>
+                                <span className="double-date-picker-calender-month-year-name">
+                                    <span className="double-date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
+                                    <span className="double-date-picker-calender-year-name">{this.year}</span>
                                 </span>
                                 <span
                                     onClick={this.nextMonthBtnHandler}
-                                    className="date-picker-calender-next-btn">&gt; </span>
+                                    className="double-date-picker-calender-next-btn">&gt; </span>
                             </div>
-                            <div className="date-picker-calender-body">
-                                <div className="date-picker-calender-day-name-wrapper">
+                            <div className="double-date-picker-calender-body">
+                                <div className="double-date-picker-calender-day-name-wrapper">
                                     {this.daysNameCreater()}
                                 </div>
                                 <div
-                                    className="date-picker-calender-month-wrapper"
+                                    className="double-date-picker-calender-month-wrapper"
                                     onClick={this.dateSelectionHandler}>
                                     {this.state.monthMarkup}
                                 </div>
                             </div>
                             {
                                 (!this.props.hideResetButton || !this.props.hideApplyButton) &&
-                                (<div className="date-picker-calender-footer">
+                                (<div className="double-date-picker-calender-footer">
                                     {
                                         !this.props.hideResetButton &&
                                         (<div
-                                            className="date-picker-calender-reset-button"
+                                            className="double-date-picker-calender-reset-button"
                                             onClick={this.resetCalender}>
                                             <span>{this.props.resetBtnText || "Reset"}</span>
                                         </div>)
@@ -738,8 +738,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                                         !this.props.hideApplyButton &&
                                         (<div
                                             className={(this.selectedDateObj.startDate && this.selectedDateObj.endDate) ?
-                                                "date-picker-calender-apply-button" :
-                                                "date-picker-calender-apply-button date-picker-calender-apply-button-disabled"}
+                                                "double-date-picker-calender-apply-button" :
+                                                "double-date-picker-calender-apply-button double-date-picker-calender-apply-button-disabled"}
                                             onClick={this.applyCalender}>
                                             <span>{this.props.applyBtnText || "Apply"}</span>
                                         </div>)
