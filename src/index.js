@@ -18,7 +18,7 @@ ReactDOM.render(<DoubleDatePickerCalender
      hideInputField={false}
      applyBtnText="APPLY"
      resetBtnText="RESET"
-     disabledPreviousDates={true}
+     disablePastDates={true}
      monthMapping=""
      weekName=""
      />, document.getElementById('root'));

@@ -159,7 +159,7 @@ export default class DoubleDatePickerCalender extends React.Component {
 
         }
 
-        if (this.props.disabledPreviousDates && this.dateComparator(startDate, this.todayDateObj, "<")) {
+        if (this.props.disablePastDates && this.dateComparator(startDate, this.todayDateObj, "<")) {
             return `${_insideMonthClass} ${_disabledDateClass}`;
         }
 
@@ -698,7 +698,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                 }
                 {
                     this.state.popperShow && (
-                        <div className="double-date-picker-calender-popper">
+                        <div className={this.props.hideInputField?"double-date-picker-calender-popper":"double-date-picker-calender-popper double-date-picker-calender-popper-arrow"}>
                             <div className="double-date-picker-calender-header">
                                 <span
                                     onClick={this.previousMonthBtnHandler}
