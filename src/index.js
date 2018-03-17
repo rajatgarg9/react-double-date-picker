@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import DoubleDatePickerCalender from './App';
+import './scss/main.css';
+import DoubleDatePickerCalender from './components/container/double-date-picker/double-date-picker-component';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<DoubleDatePickerCalender
