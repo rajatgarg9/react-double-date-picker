@@ -5,18 +5,17 @@ import DoubleDatePickerCalender from './components/container/double-date-picker/
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<DoubleDatePickerCalender
-     applyCallBack={(a,b,c)=>console.log(a,b,c)}
-     startDateCallBack={(date,obj)=>{console.log(obj)}}
-     endDateCallBack={(date,obj)=>{console.log( obj)}}
+     applyCallBack={(startDate,endDate,dateObj)=>console.log(startDate,endDate,dateObj)}
+     startDateCallBack={(startDate,startDateObj)=>{console.log(`start Date : ${startDate}`);console.log(startDateObj)}}
+     endDateCallBack={(endDate,endDateObj)=>{console.log(`end Date : ${endDate}`);console.log(endDateObj)}}
      dateFormat="MM-DD-YYYY"
      resetCallBack={()=>{console.log("reset");}}
-     hideResetButton={false}
-     hideApplyButton={false}
-     hideInputField={false}
+     datesSeperatorSymbol="->"
+     inputFieldStartDateText="Start Date"
+     inputFieldEndDateText="End Date"
      applyBtnText="APPLY"
      resetBtnText="RESET"
-     disablePastDates={true}
-     monthMapping=""
-     weekName=""
+     disablePastDates={false}
      />, document.getElementById('root'));
+     
 registerServiceWorker();
