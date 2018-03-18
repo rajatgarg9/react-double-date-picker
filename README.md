@@ -4,6 +4,9 @@ Double date Picker built with React.js . User can select two dates from single c
 
 #### How to run
 
+
+### Props
+
 |Props| Type | Default Value| Description|
 |---------|------|--------|--------|
 |weekName|array| ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"] |change name of week 's days |
@@ -18,7 +21,12 @@ Double date Picker built with React.js . User can select two dates from single c
 |inputFieldStartDateText| String | |text in input field when start date(first date) is not selected|
 |inputFieldEndDateText|  String |  |text in input field when end date(second Date) is not selected|
 |datesSeperatorSymbol|  String |-> |symbol separating start date(first date) an end date(second Date) in Input field |
-|startDateCallBack| Function | undefined |execute when start Date(First Selected date) change|
-|endDateCallBack| Function | undefined |execute when end Date(Second Selected date) change|
-|resetCallBack| Function | undefined |function execute when Reset Button is clicked|
-|applyCallBack| Function | undefined |execute when Apply button is clicked.|
+
+
+### Methods
+|Methods| Arguments | Description|
+|---------|------|--------|
+|startDateCallBack| NewStartDate: String,NewStartDateObject: Object{date:"",month:"",year:""} |execute when start Date(First Selected date) change|
+|endDateCallBack| Function | NewEndDate: String,NewEndDateObject: Object{date:"",month:"",year:""} |execute when end Date(Second Selected date) change|
+|resetCallBack|None|function execute when Reset Button is clicked|
+|applyCallBack| NewEndDate: String, NewEndDate: String,NewEndDateObject: Object{date:"",month:"",year:""} | execute when Apply button is clicked.|
