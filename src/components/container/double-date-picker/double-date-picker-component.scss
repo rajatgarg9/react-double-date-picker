@@ -1,28 +1,24 @@
-$grey:#a9a9a9;
-$grey-2:#d3d3d3;
-$grey-3:#dcdcdcb3;
-$grey-4: #dcdcdc;
-$white:#fff;
-$red:#ff0000;
-$lightgreen:#90ee90;
-$yellow:#ffff00;
-$blue:#87ceeb;
-$font-weight-light:300;
-$font-weight-semi-bold:600;
-$font-weight-bold:700;
-$font-weight-extra-bold:800;
 .double-date-picker-calender {
     &-wrapper {
         position: relative;
         text-align: center;
     }
+    &-input-wrapper {
+        height: 32px;
+        width: 220px;
+        margin: 0 auto
+    }
+    &-input-field {
+        height: 100%;
+        width: 100%;
+    }
     &-popper {
-        background-color: $white;
+        background-color: $dbl-date-pickerwhite;
         width: 300px;
-        border: 1px solid $grey;
+        border: 1px solid $dbl-date-pickergrey;
         padding: 20px;
         position: absolute;
-        z-index: 2;
+        z-index: $dbl-date-pickerz-index-2;
         top: 40px;
         left: 50%;
         transform: translateX(-50%);
@@ -30,14 +26,14 @@ $font-weight-extra-bold:800;
     &-popper-arrow {
         &::before {
             content: "";
-            height: 17px;
-            width: 17px;
+            height: 12px;
+            width: 12px;
             border: 1px solid;
-            border-color: $grey $white $white $grey;
+            border-color: $dbl-date-pickergrey $dbl-date-pickerwhite $dbl-date-pickerwhite $dbl-date-pickergrey;
             position: absolute;
-            top: -10px;
+            top: -7px;
             transform: rotate(45deg);
-            background-color: $white;
+            background-color: $dbl-date-pickerwhite;
         }
     }
     &-body {
@@ -49,7 +45,7 @@ $font-weight-extra-bold:800;
         margin-bottom: 15px;
     }
     &-month-year-name {
-        font-weight: $font-weight-bold;
+        font-weight: $dbl-date-pickerfont-weight-bold;
     }
     &-month-name {
         padding: 0 5px;
@@ -60,11 +56,11 @@ $font-weight-extra-bold:800;
         border-radius: 50%;
         width: 20px;
         height: 23px;
-        font-weight: $font-weight-extra-bold;
+        font-weight: $dbl-date-pickerfont-weight-extra-bold;
         line-height: 23px;
         cursor: pointer;
         &:hover {
-            background-color:rgba(54, 54, 54, 0.102);
+            background-color: rgba(54, 54, 54, 0.102);
         }
     }
     &-month-wrapper {
@@ -75,6 +71,12 @@ $font-weight-extra-bold:800;
     &-week {
         margin: 5px 0;
     }
+    &-day-name-wrapper,
+    &-week,
+    &-footer {
+        display: flex;
+        justify-content: space-between;
+    }
     &-day,
     &-day-name {
         width: 36px;
@@ -82,65 +84,62 @@ $font-weight-extra-bold:800;
         display: inline-block;
     }
     &-day-name {
-        font-weight: $font-weight-bold;
+        font-weight: $dbl-date-pickerfont-weight-bold;
     }
     &-day {
         padding: 5px;
         border-radius: 50%;
         cursor: pointer;
         &:hover {
-            background-color: $grey-3;
+            background-color: rgba($dbl-date-pickergrey-2, 0.7);
         }
     }
     &-today {
-        background-color: $grey-4;
-        font-weight: $font-weight-semi-bold;
+        background-color: $dbl-date-pickergrey-2;
+        opacity: 0.8;
+        font-weight: $dbl-date-pickerfont-weight-semi-bold;
     }
     &-current-month-day-disabled,
     &-outside-month-day {
         pointer-events: none;
         background-color: transparent;
-        color: $grey-4;
-        font-weight: $font-weight-light;
+        color: $dbl-date-pickergrey-2;
+        font-weight: $dbl-date-pickerfont-weight-light;
     }
     &-first-date-selected {
-        background-color: $red;
-        font-weight: $font-weight-semi-bold;
+        background-color: $dbl-date-pickerred;
+        font-weight: $dbl-date-pickerfont-weight-semi-bold;
         &:hover {
-            background-color: $red;
+            background-color: $dbl-date-pickerred;
         }
     }
     &-second-date-selected {
-        background-color: $lightgreen;
-        font-weight: $font-weight-semi-bold;
+        background-color: $dbl-date-pickerlightgreen;
+        font-weight: $dbl-date-pickerfont-weight-semi-bold;
         &:hover {
-            background-color: $lightgreen;
+            background-color: $dbl-date-pickerlightgreen;
         }
     }
     &-first-second-between-selected {
-        background-color: $yellow;
-        font-weight: $font-weight-semi-bold;
+        background-color: $dbl-date-pickeryellow;
+        font-weight: $dbl-date-pickerfont-weight-semi-bold;
         &:hover {
-            background-color: $yellow;
+            background-color: $dbl-date-pickeryellow;
         }
     }
     &-reset-button,
     &-apply-button {
         display: inline-block;
         cursor: pointer;
-        background-color: $blue;
+        background-color: $dbl-date-pickerblue;
         padding: 7px 15px;
-        font-weight: $font-weight-bold;
+        font-weight: $dbl-date-pickerfont-weight-bold;
         border-radius: 12px;
         margin: 0 20px;
     }
     &-apply-button-disabled {
         pointer-events: none;
-        background-color: $grey-2;
-        font-weight: $font-weight-light;
+        background-color: $dbl-date-pickergrey;
+        font-weight: $dbl-date-pickerfont-weight-light;
     }
-}
-
-* {
-    box-sizing: border-box;
 }

@@ -2,12 +2,12 @@
 
 Double date Picker built with React.js . User can select two dates from single calender.
 
-#### How to run
+### How to run
 
 
 
 
-#### To hides dates of previous month(in first row) and next month(in last row) add below line in your SASS
+### To hides dates of previous month(in first row) and next month(in last row) add below line in your SASS
 
 .double-date-picker-calender-outside-month-day{
   visibility: hidden;

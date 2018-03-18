@@ -1,6 +1,8 @@
 //base
-@import "./base/normalize.scss";
+@import "./base/_variables.scss";
+@import "./base/_normalize.scss";
+@import "./base/_utility.scss";
 
 
 //components
-@import "./components/components.scss";
+@import "./components/_components.scss";
