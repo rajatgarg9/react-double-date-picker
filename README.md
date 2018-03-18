@@ -6,19 +6,19 @@ Double date Picker built with React.js . User can select two dates from single c
 
 |Props| Type | Default Value| Description|
 |---------|------|--------|--------|
-|weekName|array| ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"] |dff |
-| monthMapping | array |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|dff dff dffdffd  ffdffdffd   ffdffdffdffdff dff dff dff  |
-|disablePastDates| Boolean | false |
-|resetBtnText|  String | RESET |
-|applyBtnText|  String | APPLY |
-|hideInputField|  String | false |
-|hideApplyButton|  Boolean | false |
-|hideResetButton|  Boolean | false |
-|inputFieldEndDateText|  String |
-|inputFieldStartDateText| 
-|datesSeperatorSymbol|  String | 
-|resetCallBack| Function | null |
-|dateFormat| String | DD-MM-YYYY| 
-|endDateCallBack| Function | null |
-|startDateCallBack| Function | null |
-|applyCallBack| Function | null |
+|weekName|array| ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"] |change name of week 's days |
+| monthMapping | array |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month|
+|disablePastDates| Boolean | false | if become true then dates previous to today will become disable|
+|applyBtnText|  String | APPLY | text for Apply button|
+|hideApplyButton|  Boolean | false |if become true then Apply button will removed from DOM|
+|resetBtnText|  String | RESET |text for Reset button|
+|hideResetButton|  Boolean | false |if become true then Reset button will removed from DOM|
+|hideInputField|  String | false |removed input field from DoM and calender will be display by default|
+|dateFormat| String | DD-MM-YYYY|date format after date selection|
+|inputFieldStartDateText| String | |text in input field when start date(first date) is not selected|
+|inputFieldEndDateText|  String |  |text in input field when end date(second Date) is not selected|
+|datesSeperatorSymbol|  String |-> |symbol separating start date(first date) an end date(second Date) in Input field |
+|startDateCallBack| Function | undefined |execute when start Date(First Selected date) change|
+|endDateCallBack| Function | undefined |execute when end Date(Second Selected date) change|
+|resetCallBack| Function | undefined |function execute when Reset Button is clicked|
+|applyCallBack| Function | undefined |execute when Apply button is clicked.|
