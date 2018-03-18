@@ -29,4 +29,4 @@ Double date Picker built with React.js . User can select two dates from single c
 |startDateCallBack| NewStartDate: String , NewStartDateObject: Object{date:"",month:"",year:""} |execute when start Date(First Selected date) change|
 |endDateCallBack| NewEndDate: String , NewEndDateObject: Object{date:"",month:"",year:""} |execute when end Date(Second Selected date) change|
 |resetCallBack|None|function execute when Reset Button is clicked|
-|applyCallBack| NewEndDate: String ,  NewEndDate: String , NewEndDateObject: Object{date:"",month:"",year:""} | execute when Apply button is clicked.|
+|applyCallBack| StartDate: String ,  EndDate: String ,     DateObject: Object{start:{} , end : {}} | execute when Apply button is clicked.|
