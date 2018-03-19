@@ -3,7 +3,9 @@
 Double date Picker built with React.js . User can select two dates from single calender.
 
 ### How to run
-
+  * Install dependencies by **npm install**
+  * Start sever by **npm start**
+  *It take some time to start a server after it will automatically Run Server on http://localhost:3000/
 
 
 
@@ -17,7 +19,7 @@ Double date Picker built with React.js . User can select two dates from single c
 |Props| Type | Default Value| Description|
 |---------|------|--------|--------|
 |weekName|array| ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"] |change name of week 's days |
-| monthMapping | array |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month|
+| monthMapping | Object |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month|
 |disablePastDates| Boolean | false | if become true then dates previous to today will become disable|
 |applyBtnText|  String | Apply | text for Apply button|
 |hideApplyButton|  Boolean | false |if become true then Apply button will removed from DOM|
