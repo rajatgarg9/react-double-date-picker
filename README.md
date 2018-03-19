@@ -5,7 +5,7 @@ Double date Picker built with React.js . User can select two dates from single c
 ### How to run
   * Install dependencies by **npm install**
   * Start sever by **npm start**
-  *It take some time to start a server after it will automatically Run Server on http://localhost:3000/
+  * It take some time to start a server after it will automatically Run Server on http://localhost:3000/
 
 
 
