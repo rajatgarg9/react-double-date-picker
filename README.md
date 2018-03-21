@@ -4,8 +4,8 @@ Double date Picker built with React.js . User can select two dates from single c
 
 
 <p align="center">
-  <img src="./public/images/date-picker-normal-state.PNG" width="320"/>
-  <img src="./public/images/date-picker-selected-state.PNG" width="320"/>
+  <img src="./public/images/date-picker-normal-state.jpg" width="320"/>
+  <img src="./public/images/date-picker-selected-state.jpg" width="320"/>
 </p>
 
 ### How to run
