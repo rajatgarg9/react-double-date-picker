@@ -2,6 +2,7 @@
 
 Double date Picker built with React.js . User can select two dates from single calender.
 
+![images](./public/images/date-picker-normal-state.jpg)
 
 <p align="center">
   <img src="./public/images/date-picker-normal-state.jpg" width="320"/>
