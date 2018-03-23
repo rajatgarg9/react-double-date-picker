@@ -11,6 +11,10 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractSass = new ExtractTextPlugin({
+  filename: "index.css",
+});
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -158,13 +162,14 @@ module.exports = {
           // in development "style" loader enables hot editing of CSS.
           {
             test: /\.scss$/,
-            use: [{
-              loader: "style-loader" // creates style nodes from JS strings
+            use: extractSass.extract({
+              use: [{
+                loader: "css-loader"
             }, {
-              loader: "css-loader" // translates CSS into CommonJS
-            }, {
-              loader: "sass-loader" // compiles Sass to CSS
-            }]
+                loader: "sass-loader"
+            }],
+            fallback: "style-loader"
+            })
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
@@ -189,6 +194,8 @@ module.exports = {
     ],
   },
   plugins: [
+    // Extract css from js and made different file
+    extractSass,
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
