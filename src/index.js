@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './scss/index.css';
+import './scss/index.scss';
 import DoubleDatePickerCalender from './components/container/double-date-picker/double-date-picker-component';
 import registerServiceWorker from './registerServiceWorker';
 
