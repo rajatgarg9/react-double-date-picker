@@ -49,7 +49,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {number} year 
      * @return {boolean} return true if passed year is leap year otherwise return false
      */
-    leapYearFinder=(year)=>{
+    leapYearFinder = (year) => {
         if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
             return true;
         } else {
@@ -63,7 +63,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {number} year 
      * @return {number} -- return day number 1 for monday,2 for tuesday ... 7 for sunday
      */
-    dayFinder=(date, month, year)=>{
+    dayFinder = (date, month, year) => {
         let _resultDay,
             _firstTwoDigitYear = Math.floor(year / 100);
         const _lastTwoDigitYear = year % 100,
@@ -116,7 +116,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {number} year 
      * @return {number} contain number of days like 31 in Jan , 29 in Feb in leap year etc
      */
-    daysInMonthFinder=(month, year)=>{
+    daysInMonthFinder = (month, year) => {
         return (month === 2) ? (this.leapYearFinder(year) ? 29 : 28) : (31 - (month - 1) % 7 % 2);
 
     }
@@ -152,10 +152,11 @@ export default class DoubleDatePickerCalender extends React.Component {
 
         if (hoverMode) {
             if (hoverMode === 1) {
-                _secondSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
+                _firstSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
             }
             if (hoverMode === 2) {
-                _firstSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
+                _secondSelectedDateClass = "double-date-picker-calender-first-second-between-selected";
+
             }
 
         }
@@ -200,7 +201,7 @@ export default class DoubleDatePickerCalender extends React.Component {
         let _weekMarkup = [],
             _mouseEvents = {};
         const _outsideMonthClass = "double-date-picker-calender-day double-date-picker-calender-outside-month-day";
-        if ((this.selectedDateObj.startDate && !this.selectedDateObj.endDate) || (!this.selectedDateObj.startDate && this.selectedDateObj.endDate)) {
+        if (this.selectedDateObj.startDate) {
             _mouseEvents = {
                 onMouseOver: this.dateMouseOverHandler,
                 onMouseOut: this.dateMouseOutHandler
@@ -335,7 +336,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {object} secondDateObj  -- contaion second date to compare in format {date:23,month:2,year:2018}
      * @return {number} return 1 if first date is greater ,return 2 if second date is greater and return 3 if both are equal
      */
-    dateComparatorNumberGenerator=(firstDateObj, secondDateObj)=>{
+    dateComparatorNumberGenerator = (firstDateObj, secondDateObj) => {
         if (firstDateObj.year < secondDateObj.year) {
             return 2;
         }
@@ -370,9 +371,11 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {string} operator -- contaion symbol on the basis of which both date are compared
      * @return {boolean} return true or false base on calculation
      */
-    dateComparator=(firstDateObj, secondDateObj, operator)=>{
+    dateComparator = (firstDateObj, secondDateObj, operator) => {
         let _number = this.dateComparatorNumberGenerator(firstDateObj, secondDateObj);
         if (operator === "===" && _number === 3) {
+            return true;
+        } if (operator === "!==" && _number !== 3) {
             return true;
         } else if (operator === "<=" && (_number === 3 || _number === 2)) {
             return true;
@@ -444,64 +447,16 @@ export default class DoubleDatePickerCalender extends React.Component {
         };
         if (event.target.className.search(/\bdouble-date-picker-calender-current-month-day\b/i) !== -1) {
             if (!this.selectedDateObj.startDate) {
-                if (this.selectedDateObj.endDate) {
-                    if (this.dateComparator(_selectedDate, this.selectedDateObj.endDate, "<=")) {
-                        this.selectedDateObj.startDate = _selectedDate;
-                        this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
-                        this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
+                this.selectedDateObj.startDate = _selectedDate;
+                this.selectedDateObj.endDate = _selectedDate;
+                this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
+                this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
+                this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
 
-                        this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
+                this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
+                this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
 
-                        return null;
-                    }
-                    else {
-                        this.selectedDateObj.startDate = this.selectedDateObj.endDate;
-                        this.selectedDateObj.endDate = _selectedDate;
-                        this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
-                        this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
-                        this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
-
-                        this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
-                        this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
-
-                        return null;
-                    }
-                }
-                else {
-                    this.selectedDateObj.startDate = _selectedDate;
-                    this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, 0);
-                    this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
-
-                    this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
-
-                    return null;
-                }
-
-            }
-
-            if (this.selectedDateObj.startDate && !this.selectedDateObj.endDate) {
-                if (this.dateComparator(_selectedDate, this.selectedDateObj.startDate, ">=")) {
-                    this.selectedDateObj.endDate = _selectedDate;
-                    this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
-                    this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
-
-                    this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
-
-                    return null;
-                }
-                else {
-                    this.selectedDateObj.endDate = this.selectedDateObj.startDate;
-                    this.selectedDateObj.startDate = _selectedDate;
-                    this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
-                    this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
-                    this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
-
-                    this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
-                    this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
-
-                    return null;
-                }
-
+                return null;
             }
 
             if (this.dateComparator(_selectedDate, this.selectedDateObj.startDate, "===") && this.dateComparator(_selectedDate, this.selectedDateObj.endDate, "===")) {
@@ -521,8 +476,9 @@ export default class DoubleDatePickerCalender extends React.Component {
                 return null;
             }
             if (this.dateComparator(_selectedDate, this.selectedDateObj.startDate, "===")) {
-                this.selectedDateObj.startDate = "";
-                this.selectedDateWithDateFormatObj.startDate = this.props.inputFieldStartDateText || "";
+
+                this.selectedDateObj.startDate = this.selectedDateObj.endDate;
+                this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
                 this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
 
                 this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
@@ -530,8 +486,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                 return null;
             }
             if (this.dateComparator(_selectedDate, this.selectedDateObj.endDate, "===")) {
-                this.selectedDateObj.endDate = "";
-                this.selectedDateWithDateFormatObj.endDate = this.props.inputFieldEndDateText || "";
+                this.selectedDateObj.endDate = this.selectedDateObj.startDate;
+                this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
                 this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
 
                 this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
@@ -540,19 +496,19 @@ export default class DoubleDatePickerCalender extends React.Component {
             }
             if (this.dateComparator(_selectedDate, this.selectedDateObj.startDate, ">=")) {
                 this.selectedDateObj.endDate = _selectedDate;
-                this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
+                this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
                 this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
 
-                this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
+                this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
 
                 return null;
             }
             else {
                 this.selectedDateObj.startDate = _selectedDate;
-                this.selectedDateWithDateFormatObj.endDate = this.dateFormatHandler(this.selectedDateObj.endDate, this.props.dateFormat);
+                this.selectedDateWithDateFormatObj.startDate = this.dateFormatHandler(this.selectedDateObj.startDate, this.props.dateFormat);
                 this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
 
-                this.props.endDateCallBack && this.props.endDateCallBack(this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj.endDate);
+                this.props.startDateCallBack && this.props.startDateCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateObj.startDate);
 
                 return null;
             }
@@ -576,21 +532,15 @@ export default class DoubleDatePickerCalender extends React.Component {
             this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
             return null;
         }
-        if (this.selectedDateObj.startDate && !this.selectedDateObj.endDate && this.dateComparator(_selectedDate, this.selectedDateObj.startDate, "<")) {
-            this.calenderHandler(this.month, this.year, _selectedDate, this.selectedDateObj.startDate, 2);
-            return null;
-        }
-        if (this.selectedDateObj.startDate && !this.selectedDateObj.endDate) {
-            this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, _selectedDate, 1);
-        }
-        if (this.selectedDateObj.endDate && !this.selectedDateObj.startDate && this.dateComparator(_selectedDate, this.selectedDateObj.endDate, ">")) {
-            this.calenderHandler(this.month, this.year, this.selectedDateObj.endDate, _selectedDate, 1);
-            return null;
-        }
-        if ((!this.selectedDateObj.startDate && this.selectedDateObj.endDate)) {
-            this.calenderHandler(this.month, this.year, _selectedDate, this.selectedDateObj.endDate, 2);
-        }
 
+        if (this.dateComparator(_selectedDate, this.selectedDateObj.startDate, "<")) {
+            this.calenderHandler(this.month, this.year, _selectedDate, this.selectedDateObj.endDate, 1);
+            return null;
+        }
+        else {
+            this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, _selectedDate, 2);
+            return null;
+        }
     }
 
     /**
@@ -638,7 +588,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @param {string} dateFormat
      * @return {string} _date conerted date in particular format
      */
-    dateFormatHandler=(dateObj, dateFormat)=>{
+    dateFormatHandler = (dateObj, dateFormat) => {
         let _date;
 
         if (!dateFormat || dateFormat.indexOf("DD") === -1 || dateFormat.indexOf("MM") === -1 || dateFormat.indexOf("YYYY") === -1) {
@@ -736,7 +686,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                                     {
                                         !this.props.hideApplyButton &&
                                         (<div
-                                            className={(this.selectedDateObj.startDate && this.selectedDateObj.endDate) ?
+                                            className={(this.selectedDateObj.startDate) ?
                                                 "double-date-picker-calender-apply-button" :
                                                 "double-date-picker-calender-apply-button double-date-picker-calender-apply-button-disabled"}
                                             onClick={this.applyCalender}>
@@ -759,9 +709,9 @@ DoubleDatePickerCalender.propTypes = {
     applyBtnText: PropTypes.string,
     resetBtnText: PropTypes.string,
     dateFormat: PropTypes.string,
-    datesSeperatorSymbol:PropTypes.string,
-    inputFieldStartDateText:PropTypes.string,
-    inputFieldEndDateText:PropTypes.string,
+    datesSeperatorSymbol: PropTypes.string,
+    inputFieldStartDateText: PropTypes.string,
+    inputFieldEndDateText: PropTypes.string,
     hideResetButton: PropTypes.bool,
     hideApplyButton: PropTypes.bool,
     hideInputField: PropTypes.bool,
