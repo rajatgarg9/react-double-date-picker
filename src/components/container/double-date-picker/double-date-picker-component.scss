@@ -128,14 +128,18 @@
         }
     }
     &-reset-button,
-    &-apply-button {
+    &-apply-button-wrapper {
         display: inline-block;
+        margin: 0 20px;
+    }
+    &-reset-button,
+    &-apply-button {
         cursor: pointer;
         background-color: $dbl-date-picker-blue;
         padding: 7px 15px;
         font-weight: $dbl-date-picker-font-weight-bold;
+        border: none;
         border-radius: 12px;
-        margin: 0 20px;
     }
     &-apply-button-disabled {
         pointer-events: none;

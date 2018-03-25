@@ -218,6 +218,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                     <span
                         className={_outsideMonthClass}
                         key={i}
+                        tabIndex="-1"
                     >{startDate.date}
                     </span>
                     ];
@@ -235,6 +236,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                         data-date={startDate.date}
                         data-month={startDate.month}
                         data-year={startDate.year}
+                        tabIndex="0"
+                        aria-labelledby={this.ariaDateHandler(startDate)}
                         {..._mouseEvents}
                     >
                         {startDate.date++}
@@ -254,6 +257,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                         data-date={startDate.date}
                         data-month={startDate.month}
                         data-year={startDate.year}
+                        tabIndex="0"
+                        aria-labelledby={this.ariaDateHandler(startDate)}
                         {..._mouseEvents}
                     >
                         {startDate.date}
@@ -265,7 +270,12 @@ export default class DoubleDatePickerCalender extends React.Component {
                 else {
 
                     _weekMarkup = [..._weekMarkup,
-                    <span className={_outsideMonthClass} key={i}>{j++}
+                    <span
+                        className={_outsideMonthClass}
+                        key={i}
+                        tabIndex="-1"
+                    >
+                        {j++}
                     </span>
                     ];
                 }
@@ -280,6 +290,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                     data-date={startDate.date}
                     data-month={startDate.month}
                     data-year={startDate.year}
+                    tabIndex="0"
+                    aria-labelledby={this.ariaDateHandler(startDate)}
                     {..._mouseEvents}
                 >
                     {startDate.date}
@@ -408,12 +420,26 @@ export default class DoubleDatePickerCalender extends React.Component {
         });
     }
 
+    eventValidator = (event) => {
+        let _eventCode = event.which || event.keyCode;
+        if ((event.type === "click") || (event.type === "keypress" && _eventCode === 13)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     /**
-     * previousMonthBtnHandler -- on click on previous month arrow ,create markup for previous month
+     * previousMonthBtnHandler -- on click or press enter on previous month arrow ,create markup for previous month
      * {undefined} -- not have params
      * {undefined} --not return anything
      */
-    previousMonthBtnHandler = () => {
+    previousMonthBtnHandler = (event) => {
+
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         let _firstSelectedDate = this.selectedDateObj.startDate,
             _secondSelectedDate = this.selectedDateObj.endDate;
         (this.month - 1 === 0) ?
@@ -422,11 +448,16 @@ export default class DoubleDatePickerCalender extends React.Component {
     }
 
     /**
-     * nextMonthBtnHandler -- on click on next month arrow ,create markup for next month
+     * nextMonthBtnHandler -- on click or press enter on next month arrow ,create markup for next month
      * {undefined} -- not have params
      * {undefined} --not return anything
      */
-    nextMonthBtnHandler = () => {
+    nextMonthBtnHandler = (event) => {
+
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         let _firstSelectedDate = this.selectedDateObj.startDate,
             _secondSelectedDate = this.selectedDateObj.endDate;
         (this.month + 1 === 13) ?
@@ -440,6 +471,10 @@ export default class DoubleDatePickerCalender extends React.Component {
      * {null} -- terminate function once any condition matched
      */
     dateSelectionHandler = (event) => {
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         let _selectedDate = {
             date: Number(event.target.dataset["date"]),
             month: Number(event.target.dataset["month"]),
@@ -558,7 +593,12 @@ export default class DoubleDatePickerCalender extends React.Component {
      * {undefined} -- no parameter
      * {undefined} -- not returing anything
      */
-    resetCalender = () => {
+    resetCalender = (event) => {
+
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         this.selectedDateObj = {
             startDate: "",
             endDate: ""
@@ -579,7 +619,11 @@ export default class DoubleDatePickerCalender extends React.Component {
      * {undefined} -- no parameter
      * {undefined} -- not returing anything
      */
-    applyCalender = () => {
+    applyCalender = (event) => {
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj);
     }
     /**
@@ -621,11 +665,15 @@ export default class DoubleDatePickerCalender extends React.Component {
     }
 
     /**
-     * popperVisibilityHandler -- handle calender popper display , hide functionality on click
+     * popperVisibilityHandler -- handle calender popper display , hide functionality on click or mouse enter
      * @param {object} event -- event object passed on click
      * @return {undefined}
      */
     popperVisibilityHandler = (event) => {
+        if (!this.eventValidator(event)) {
+            return null;
+        }
+
         this.setState({
             popperShow: !this.state.popperShow
         }, () => {
@@ -633,6 +681,9 @@ export default class DoubleDatePickerCalender extends React.Component {
         });
     }
 
+    ariaDateHandler = (dateObj) => {
+        return `${dateObj.date} ${this.monthMapping[dateObj.month]} ${dateObj.year}`;
+    }
     render() {
         return (
             <div className="double-date-picker-calender-wrapper">
@@ -644,6 +695,11 @@ export default class DoubleDatePickerCalender extends React.Component {
                             value={`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol || "->"} ${this.selectedDateWithDateFormatObj.endDate}`}
                             className="double-date-picker-calender-input-field"
                             onClick={this.popperVisibilityHandler}
+                            onKeyPress={this.popperVisibilityHandler}
+                            aria-labelledby={this.selectedDateObj.startDate ?
+                                `${this.ariaDateHandler(this.selectedDateObj.startDate)} to ${this.ariaDateHandler(this.selectedDateObj.endDate)}` :
+                                "Please select a Date"}
+                            tabIndex="0"
                             readOnly />
                     </div>)
                 }
@@ -653,14 +709,26 @@ export default class DoubleDatePickerCalender extends React.Component {
                             <div className="double-date-picker-calender-header">
                                 <span
                                     onClick={this.previousMonthBtnHandler}
-                                    className="double-date-picker-calender-previous-btn"> &lt; </span>
-                                <span className="double-date-picker-calender-month-year-name">
+                                    onKeyPress={this.previousMonthBtnHandler}
+                                    className="double-date-picker-calender-previous-btn"
+                                    aria-labelledby="Previous month button"
+                                    tabIndex="0">
+                                    &lt;
+                                </span>
+                                <span
+                                    className="double-date-picker-calender-month-year-name"
+                                    tabIndex="0">
                                     <span className="double-date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
                                     <span className="double-date-picker-calender-year-name">{this.year}</span>
                                 </span>
                                 <span
                                     onClick={this.nextMonthBtnHandler}
-                                    className="double-date-picker-calender-next-btn">&gt; </span>
+                                    onKeyPress={this.nextMonthBtnHandler}
+                                    className="double-date-picker-calender-next-btn"
+                                    aria-labelledby="Next month button"
+                                    tabIndex="0">
+                                    &gt;
+                                </span>
                             </div>
                             <div className="double-date-picker-calender-body">
                                 <div className="double-date-picker-calender-day-name-wrapper">
@@ -668,7 +736,9 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 </div>
                                 <div
                                     className="double-date-picker-calender-month-wrapper"
-                                    onClick={this.dateSelectionHandler}>
+                                    tabIndex="-1"
+                                    onClick={this.dateSelectionHandler}
+                                    onKeyPress={this.dateSelectionHandler}>
                                     {this.state.monthMarkup}
                                 </div>
                             </div>
@@ -677,20 +747,26 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 (<div className="double-date-picker-calender-footer">
                                     {
                                         !this.props.hideResetButton &&
-                                        (<div
-                                            className="double-date-picker-calender-reset-button"
-                                            onClick={this.resetCalender}>
-                                            <span>{this.props.resetBtnText || "Reset"}</span>
+                                        (<div className="double-date-picker-calender-reset-button-wrapper">
+                                            <button
+                                                className="double-date-picker-calender-reset-button"
+                                                onClick={this.resetCalender}
+                                                onKeyPress={this.resetCalender}
+                                                tabIndex="0"
+                                            >{this.props.resetBtnText || "Reset"}</button>
                                         </div>)
                                     }
                                     {
                                         !this.props.hideApplyButton &&
-                                        (<div
-                                            className={(this.selectedDateObj.startDate) ?
-                                                "double-date-picker-calender-apply-button" :
-                                                "double-date-picker-calender-apply-button double-date-picker-calender-apply-button-disabled"}
-                                            onClick={this.applyCalender}>
-                                            <span>{this.props.applyBtnText || "Apply"}</span>
+                                        (<div className="double-date-picker-calender-apply-button-wrapper" >
+                                            <button
+                                                className={(this.selectedDateObj.startDate) ?
+                                                    "double-date-picker-calender-apply-button" :
+                                                    "double-date-picker-calender-apply-button double-date-picker-calender-apply-button-disabled"}
+                                                onClick={this.applyCalender}
+                                                onKeyPress={this.applyCalender}
+                                                tabIndex="0"
+                                            >{this.props.applyBtnText || "Apply"}</button>
                                         </div>)
                                     }
                                 </div>
