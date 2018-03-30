@@ -24,8 +24,9 @@ Double date Picker built with React.js . User can select two dates from single c
 
 |Props| Type | Default Value| Description|
 |---------|------|--------|--------|
-|weekName|array| ["Mn", "Tu", "We", "Th", "Fr", "Sa", "Su"] |change name of week 's days |
-| monthMapping | Object |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month|
+| monthMapping | Object |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month and it must of 12 properties|
+|weekNames|Object| {  1:"Monday",   2:"Tuesday",  3:"Wednesday",  4:"Thrusday",  5:"Friday",  6:"Saturday", 7:"Sunday"}|change name of week 's days and it must of 7 properties|
+|weekNamesLength|Number or String|2|decide the number of character of week name |
 |disablePastDates| Boolean | false | if become true then dates previous to today will become disable|
 |applyBtnText|  String | Apply | text for Apply button|
 |hideApplyButton|  Boolean | false |if become true then Apply button will removed from DOM|

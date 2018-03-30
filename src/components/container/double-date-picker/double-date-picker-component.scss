@@ -67,6 +67,7 @@
         height: 212px;
         font-size: 17px;
         line-height: 23px;
+        outline: none;
     }
     &-week {
         margin: 5px 0;
@@ -100,7 +101,7 @@
         font-weight: $dbl-date-picker-font-weight-semi-bold;
     }
     &-current-month-day-disabled,
-    &-outside-month-day {
+    &-outside-month-day-previous,&-outside-month-day-next{
         pointer-events: none;
         background-color: transparent;
         color: $dbl-date-picker-grey-2;
