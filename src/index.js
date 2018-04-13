@@ -17,7 +17,8 @@ ReactDOM.render(<div><DoubleDatePickerCalender
     resetBtnText="RESET"
     disablePastDates={false}
     hideInputField={false}
-    weekNameLength="2"
+    weekNamesLength="2"
+    datePickerMode="3"
     /></div>, document.getElementById('root'));
      
 registerServiceWorker();
