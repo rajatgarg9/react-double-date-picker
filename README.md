@@ -27,14 +27,8 @@
 |---------|------|--------|--------|
 | monthMapping | Object |{  1:"January",   2:"Feburary",  3:"March",  4:"April",  5:"May",  6:"June",   7:"July",  8:"August",  9:"September",  10:"October",  11:"November",  12:"December"  }|change name of month and it must of 12 properties|
 |weekNames|Object| {  1:"Monday",   2:"Tuesday",  3:"Wednesday",  4:"Thrusday",  5:"Friday",  6:"Saturday", 7:"Sunday"}|change name of week 's days and it must of 7 properties|
-|yearDropDownList|Object|{enable:false}|We can change year from dropdown list of years. example for enable year dropdown {enable:true,startYear:1922,endYear:2999}.
-###Properties description :- 
-* **enable** - if true then it will show dropdown default false 
-* **startYear (1900 Default Value)(Optional)** - first year of dropdown 
-* **endYear (2199 Default Value)(Optional)** - last year of dropdown |
-|monthDropDownList|Object|{enable:false}|We can change month from dropdown list of month. example for enable month dropdown {enable:true}.
-###Properties description :- 
-* **enable** - if true then it will show dropdown default false |
+|yearDropDownList|Object|{enable:false}|We can change year from dropdown list of years. example for enable year dropdown {enable:true,startYear:1922,endYear:2999}.###Properties description :-* **enable** - if true then it will show dropdown default false * **startYear (1900 Default Value)(Optional)** - first year of dropdown * **endYear (2199 Default Value)(Optional)** - last year of dropdown |
+|monthDropDownList|Object|{enable:false}|We can change month from dropdown list of month. example for enable month dropdown {enable:true}. ###Properties description :- * **enable** - if true then it will show dropdown default false |
 |datePickerMode| Number | 2 |1 for single date picker , 2 for double date picker and 3 for normal calender|
 |weekNamesLength|Number or String|2|decide the number of character of week name |
 |disablePastDates| Boolean | false | if become true then dates previous to today will become disable|
