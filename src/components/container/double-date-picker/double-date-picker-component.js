@@ -87,10 +87,10 @@ export default class DoubleDatePickerCalender extends React.Component {
      * datePickerLogicMapping -- on call set date picker logic to single date picker,double date picker or simple calender 
      *   1 for single date picker , 2 for double date picker and 3 for simple calender otherwise it will behave as double date picker
      * @param {undefined}  no params
-     * * @return {Object} {number-contain mode in numeric,text- contain mode in string} 
+     * @return {Object} {number-contain mode in numeric,text- contain mode in string} 
      */
     datePickerLogicMapping = () => {
-        const _datePickerMode=Number(this.props.datePickerMode);
+        const _datePickerMode = Number(this.props.datePickerMode);
 
         if (_datePickerMode === 1) {
             this.datePickerDateLogic = this.singleDatePickerDateLogic;
@@ -1036,6 +1036,71 @@ export default class DoubleDatePickerCalender extends React.Component {
         return !this.props.hideInputField && (this.datePickerMode.number !== 3);
     }
 
+
+    /**
+     * monthDropdownHandler -- on call display dropdown for month base on props value is true otherwise simple text of month
+     * @param {undefined} no params
+     * @return {object} markup for months
+     */
+    monthDropdownHandler = () => {
+
+        if (this.props.monthDropDownList && this.props.monthDropDownList.enable) {
+            let _optionMarkup = [];
+            for (const key in this.monthMapping) {
+                _optionMarkup = [..._optionMarkup, <option
+                    key={key}
+                    value={key}>
+                    {this.monthMapping[key]}
+                </option>];
+            }
+
+            return (<select value={this.month} className="double-date-picker-calender-month-name-dropdown" onChange={
+                (e) => {
+                    this.month = Number(e.target.selectedIndex + 1);
+                    this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
+                }
+            }>
+                {_optionMarkup}
+            </select>);
+        }
+        else {
+            return (<span className="double-date-picker-calender-month-name">{this.monthMapping[this.month]}</span>);
+        }
+    }
+
+    /**
+     * yearDropdownHandler -- on call display dropdown for year base on props value is true otherwise simple text of year
+     * @param {undefined} no params
+     * @return {object} markup for months
+     */
+    yearDropdownHandler = () => {
+
+        if (this.props.yearDropDownList && this.props.yearDropDownList.enable) {
+            const _startYear = Number(this.props.yearDropDownList.startYear) || 1900,
+                _endYear = Number(this.props.yearDropDownList.endYear) || 2199;
+            let _optionMarkup = [];
+            for (let i = _startYear; i <= _endYear; i++) {
+                _optionMarkup = [..._optionMarkup, <option value={i} key={i}>{i}</option>];
+
+            }
+            return (<select
+                className="double-date-picker-calender-year-name-dropdown"
+                value={this.year}
+                onChange={
+                    (e) => {
+                        this.year = Number(e.target.value);
+                        this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
+                    }
+                }>
+                {_optionMarkup}
+            </select>);
+        }
+        else {
+            return (<span className="double-date-picker-calender-year-name">{this.year}</span>);
+        }
+    }
+
+
     render() {
         const _displayInputField = this.inputFieldVisiblityHandler(),
             _inputFieldObj = _displayInputField && this.inputFieldDataHandler();
@@ -1071,8 +1136,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 <span
                                     className="double-date-picker-calender-month-year-name"
                                     tabIndex="0">
-                                    <span className="double-date-picker-calender-month-name">{this.monthMapping[this.month]}</span>
-                                    <span className="double-date-picker-calender-year-name">{this.year}</span>
+                                    {this.monthDropdownHandler()}
+                                    {this.yearDropdownHandler()}
                                 </span>
                                 <span
                                     onClick={this.nextMonthBtnHandler}
@@ -1139,10 +1204,18 @@ DoubleDatePickerCalender.propTypes = {
         PropTypes.string,
         PropTypes.number,
     ]),
-    datePickerMode:PropTypes.oneOfType([
+    datePickerMode: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
     ]),
+    yearDropDownList: PropTypes.shape({
+        enable: PropTypes.bool,
+        startYear: PropTypes.number,
+        endYear: PropTypes.number
+    }),
+    monthDropDownList: PropTypes.shape({
+        enable: PropTypes.bool
+    }),
     monthMapping: PropTypes.objectOf(PropTypes.string),
     applyBtnText: PropTypes.string,
     resetBtnText: PropTypes.string,
