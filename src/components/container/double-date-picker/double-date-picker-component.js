@@ -1054,12 +1054,17 @@ export default class DoubleDatePickerCalender extends React.Component {
                 </option>];
             }
 
-            return (<select value={this.month} className="double-date-picker-calender-month-name-dropdown" onChange={
-                (e) => {
-                    this.month = Number(e.target.selectedIndex + 1);
-                    this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
-                }
-            }>
+            return (<select
+                value={this.month}
+                className="double-date-picker-calender-month-name-dropdown"
+                role="listbox"
+                aria-label="months"
+                onChange={
+                    (e) => {
+                        this.month = Number(e.target.selectedIndex + 1);
+                        this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate);
+                    }
+                }>
                 {_optionMarkup}
             </select>);
         }
@@ -1086,6 +1091,8 @@ export default class DoubleDatePickerCalender extends React.Component {
             return (<select
                 className="double-date-picker-calender-year-name-dropdown"
                 value={this.year}
+                role="listbox"
+                aria-label="years"
                 onChange={
                     (e) => {
                         this.year = Number(e.target.value);
@@ -1135,7 +1142,8 @@ export default class DoubleDatePickerCalender extends React.Component {
                                 </span>
                                 <span
                                     className="double-date-picker-calender-month-year-name"
-                                    tabIndex="0">
+                                    tabIndex="0"
+                                    aria-label={`${this.monthMapping[this.month]} ${this.year}`}>
                                     {this.monthDropdownHandler()}
                                     {this.yearDropdownHandler()}
                                 </span>
