@@ -6,53 +6,125 @@ export default class DoubleDatePickerCalender extends React.Component {
     constructor(props) {
         super(props);
 
-        // mapping Name of months and week by props
-        this.nameMapping();
+        const _nameMappingObj = this.nameMapping(),  // mapping Name of months and week by props
+            // decide single date picker , double date picker or simple calender 1 for single date picker , 
+            // 2 for double date picker and 3 for simple calender with date picker
+            _datePickerLogicMappingObj = this.datePickerLogicMapping(), //object
+            _dateObj = new Date();
 
-        const dateObj = new Date();
-        this.day = dateObj.getDay(); // get day (1-7)
-        this.date = dateObj.getDate(); // get date (1-31)
-        this.month = dateObj.getMonth() + 1; //  month (1-12)
-        this.year = dateObj.getFullYear();
+        //global variables
+        this.monthMapping = _nameMappingObj.monthMapping; //object
+        this.weekNamesMapping = _nameMappingObj.weekNamesMapping; //object
+        this.datePickerDateLogic = _datePickerLogicMappingObj.datePickerDateLogic; //function
+        this.datePickerMode = _datePickerLogicMappingObj.modeInfo; //object       
         this.todayDateObj = {         //contain information of current day 
-            day: this.weekNamesMapping[this.day % 7],
-            date: this.date,
-            month: this.month,
-            year: this.year
+            day: _dateObj.getDay(), // get day (1-7)
+            date: _dateObj.getDate(), // get date (1-31)
+            month: _dateObj.getMonth() + 1, //  month (1-12)
+            year: _dateObj.getFullYear()
         };
 
-        // decide single date picker , double date picker or simple calender 1 for single date picker , 
-        // 2 for double date picker and 3 for simple calender with date picker
-        this.datePickerMode = this.datePickerLogicMapping(); //object
+        //defined here beacuse thie function need above variables
+        const _defaultDateHandlerObj = this.defaultDateHandler();  //Object
 
+
+        this.date = _defaultDateHandlerObj.defaultSelectedDateObj.date;  //number
+        this.month = _defaultDateHandlerObj.defaultSelectedDateObj.month;  //number
+        this.year = _defaultDateHandlerObj.defaultSelectedDateObj.year; //number
+        this.selectedDateObj = _defaultDateHandlerObj.selectedDateObj; //object
+        this.selectedDateWithDateFormatObj = _defaultDateHandlerObj.selectedDateWithDateFormatObj; //object
+
+        //this binding
         this.dateSelectionHandler = this.dateSelectionHandler.bind(this);
         this.monthCreater = this.monthCreater.bind(this);
-        this.selectedDateObj = {
-            startDate: "", // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-            endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-        };
-        //contain date in particular format
-        this.selectedDateWithDateFormatObj = {
-            startDate: props.inputFieldStartDateText || "",  // always string
-            endDate: props.inputFieldEndDateText || ""    //always string
-        };
+
+        //this.day = this.todayDateObj.day;
         this.state = {
-            monthMarkup: this.monthCreater(this.month, this.year), //create month for current month for initial rendering
+            monthMarkup: this.monthCreater(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate), //create month for current month for initial rendering
             popperShow: !this.inputFieldVisiblityHandler()
+        }
+    }
+
+    /**
+     * defaultDateHandler --base on the defaultSelectedDate props initialize variable for first time rendering
+     * @param {undefined} no parameters
+     * @return {Object} -- properties --> defaultSelectedDateObj --> start date passed by user otherwise today date,selectedDateObj -->contain start and end date for selection ,selectedDateWithDateFormatObj contain start and end date in string
+     */
+    defaultDateHandler = () => {
+        let _defaultSelectedDateObj = "",
+            _selectedDateObj = "",
+            _selectedDateWithDateFormatObj = ""
+
+        if (this.props.defaultSelectedDate && this.props.defaultSelectedDate.startDate && this.datePickerMode.number !== 3) {
+            _defaultSelectedDateObj = {
+                date: this.props.defaultSelectedDate.startDate.date,
+                month: this.props.defaultSelectedDate.startDate.month,
+                year: this.props.defaultSelectedDate.startDate.year
+            };
+            if (this.datePickerMode.number === 1) {
+                _selectedDateObj = {
+                    startDate: this.props.defaultSelectedDate.startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                    endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                };
+                // contain date in particular format
+                _selectedDateWithDateFormatObj = {
+                    startDate: this.dateFormatHandler(this.props.defaultSelectedDate.startDate, this.props.dateFormat),  // always string
+                    endDate: ""    //always string
+                };
+            } else {
+                const _endDate = this.props.defaultSelectedDate.endDate ? this.props.defaultSelectedDate.endDate : this.props.defaultSelectedDate.startDate;
+                _selectedDateObj = {
+                    startDate: this.props.defaultSelectedDate.startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                    endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                };
+                // contain date in particular format
+                _selectedDateWithDateFormatObj = {
+                    startDate: this.dateFormatHandler(this.props.defaultSelectedDate.startDate, this.props.dateFormat),  // always string
+                    endDate: this.dateFormatHandler(_endDate, this.props.dateFormat)    //always string
+                };
+            }
+        } else {
+            _defaultSelectedDateObj = {
+                date: this.todayDateObj.date,
+                month: this.todayDateObj.month,
+                year: this.todayDateObj.year
+            };
+            _selectedDateObj = {
+                startDate: "", // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+            };
+            // contain date in particular format
+            _selectedDateWithDateFormatObj = {
+                startDate: this.props.inputFieldStartDateText || "",  // always string
+                endDate: this.props.inputFieldEndDateText || ""    //always string
+            };
+
+            this.selectedDateObj = {
+                startDate: "", // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+            };
+        }
+
+        return {
+            defaultSelectedDateObj: _defaultSelectedDateObj,
+            selectedDateObj: _selectedDateObj,
+            selectedDateWithDateFormatObj: _selectedDateWithDateFormatObj
         }
     }
 
     /**
      * nameMapping -- on call map  week name and month name on basis of condition if condition false then give default name 
      * @param {undefined}  no params
-     * @return {undefined} no returns 
+     * @return {Object} properties -> monthMapping -- contain object of month mapping ,weekNamesMapping -- contain object of week mapping
      */
     nameMapping = () => {
+        let _monthMapping,
+            _weekNamesMapping;
         if (this.props.monthMapping && Object.keys(this.props.monthMapping).length === 12) {
-            this.monthMapping = this.props.monthMapping
+            _monthMapping = this.props.monthMapping
         }
         else {
-            this.monthMapping = {
+            _monthMapping = {
                 1: "January",
                 2: "Feburary",
                 3: "March",
@@ -68,10 +140,10 @@ export default class DoubleDatePickerCalender extends React.Component {
             };
         };
         if (this.props.weekNamesMapping && Object.keys(this.props.weekNamesMapping).length === 7) {
-            this.monthMapping = this.props.weekNames
+            _monthMapping = this.props.weekNames
         }
         else {
-            this.weekNamesMapping = {
+            _weekNamesMapping = {
                 1: "Monday",
                 2: "Tuesday",
                 3: "Wednesday",
@@ -81,36 +153,51 @@ export default class DoubleDatePickerCalender extends React.Component {
                 7: "Sunday",
             };
         }
+
+        return {
+            weekNamesMapping: _weekNamesMapping,
+            monthMapping: _monthMapping
+        }
     }
 
     /**
      * datePickerLogicMapping -- on call set date picker logic to single date picker,double date picker or simple calender 
      *   1 for single date picker , 2 for double date picker and 3 for simple calender otherwise it will behave as double date picker
      * @param {undefined}  no params
-     * @return {Object} {number-contain mode in numeric,text- contain mode in string} 
+     * @return {Object} {modeInfo -- contain information of mode in object form ,datePickerDateLogic-- contain function for date picker logic} 
      */
     datePickerLogicMapping = () => {
         const _datePickerMode = Number(this.props.datePickerMode);
+        let _datePickerDateLogic;
 
         if (_datePickerMode === 1) {
-            this.datePickerDateLogic = this.singleDatePickerDateLogic;
+            _datePickerDateLogic = this.singleDatePickerDateLogic;
             return {
-                number: 1,
-                text: "single"
+                modeInfo: {
+                    number: 1,
+                    text: "single"
+                },
+                datePickerDateLogic: _datePickerDateLogic
             };
         }
         else if (_datePickerMode === 3) {
-            this.datePickerDateLogic = () => { };
+            _datePickerDateLogic = () => { };
             return {
-                number: 3,
-                text: "simple-calender"
+                modeInfo: {
+                    number: 3,
+                    text: "simple-calender"
+                },
+                datePickerDateLogic: _datePickerDateLogic
             };
         }
         else {
-            this.datePickerDateLogic = this.doubleDatePickerDateLogic;
+            _datePickerDateLogic = this.doubleDatePickerDateLogic;
             return {
-                number: 2,
-                text: "double"
+                modeInfo: {
+                    number: 2,
+                    text: "double",
+                },
+                datePickerDateLogic: _datePickerDateLogic
             };
         }
     }
@@ -1223,6 +1310,18 @@ DoubleDatePickerCalender.propTypes = {
     }),
     monthDropDownList: PropTypes.shape({
         enable: PropTypes.bool
+    }),
+    defaultSelectedDate: PropTypes.shape({
+        startDate: PropTypes.shape({
+            date: PropTypes.number,
+            month: PropTypes.number,
+            year: PropTypes.number
+        }),
+        endDate: PropTypes.shape({
+            date: PropTypes.number,
+            month: PropTypes.number,
+            year: PropTypes.number
+        })
     }),
     monthMapping: PropTypes.objectOf(PropTypes.string),
     applyBtnText: PropTypes.string,
