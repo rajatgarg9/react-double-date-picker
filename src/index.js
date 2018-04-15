@@ -18,9 +18,10 @@ ReactDOM.render(<div><DoubleDatePickerCalender
     disablePastDates={false}
     hideInputField={false}
     weekNamesLength="2"
-    datePickerMode="1"
+    datePickerMode="2"
     yearDropDownList={{enable:true,startYear:1922,endYear:2999}}
     monthDropDownList={{enable:true}}
+    defaultSelectedDate={{startDate:{date:10,month:5,year:2019},endDate:{date:11,month:6,year:2019}}}
     /></div>, document.getElementById('root'));
      
 registerServiceWorker();
