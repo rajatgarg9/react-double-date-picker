@@ -23,7 +23,7 @@ export default class DoubleDatePickerCalender extends React.Component {
             month: _dateObj.getMonth() + 1, //  month (1-12)
             year: _dateObj.getFullYear()
         };
-        this.disablePastDates = this.disablePastDatesHandler(); //Object -- all the dates before this date will become disable
+        this.disablePastDates = this.props.disablePastDates && this.disablePastDatesHandler(); //Object -- all the dates before this date will become disable
 
 
         //defined here beacuse thie function need above variables
@@ -85,7 +85,7 @@ export default class DoubleDatePickerCalender extends React.Component {
 
         if (this.props.defaultSelectedDate && this.props.defaultSelectedDate.startDate && this.datePickerMode.number !== 3) {
             if (this.datePickerMode.number === 1) {
-                _startDate = this.dateComparator(this.disablePastDates, this.props.defaultSelectedDate.startDate, ">") ? this.disablePastDates : this.props.defaultSelectedDate.startDate;
+                _startDate = this.disablePastDates && this.dateComparator(this.disablePastDates, this.props.defaultSelectedDate.startDate, ">") ? this.disablePastDates : this.props.defaultSelectedDate.startDate;
 
                 _selectedDateObj = {
                     startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
@@ -111,7 +111,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                     _startDate = this.props.defaultSelectedDate.startDate;
                     _endDate = _startDate;
                 }
-                _startDate = this.dateComparator(this.disablePastDates, _startDate, ">") ? this.disablePastDates : _startDate;
+                _startDate = this.disablePastDates && this.dateComparator(this.disablePastDates, _startDate, ">") ? this.disablePastDates : _startDate;
 
                 _selectedDateObj = {
                     startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
