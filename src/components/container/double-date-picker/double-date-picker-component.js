@@ -23,16 +23,18 @@ export default class DoubleDatePickerCalender extends React.Component {
             month: _dateObj.getMonth() + 1, //  month (1-12)
             year: _dateObj.getFullYear()
         };
+        this.disablePastDates = this.disablePastDatesHandler(); //Object -- all the dates before this date will become disable
+
 
         //defined here beacuse thie function need above variables
         const _defaultDateHandlerObj = this.defaultDateHandler();  //Object
 
 
-        this.date = _defaultDateHandlerObj.defaultSelectedDateObj.date;  //number
         this.month = _defaultDateHandlerObj.defaultSelectedDateObj.month;  //number
         this.year = _defaultDateHandlerObj.defaultSelectedDateObj.year; //number
         this.selectedDateObj = _defaultDateHandlerObj.selectedDateObj; //object
         this.selectedDateWithDateFormatObj = _defaultDateHandlerObj.selectedDateWithDateFormatObj; //object
+
 
         //this binding
         this.dateSelectionHandler = this.dateSelectionHandler.bind(this);
@@ -46,49 +48,91 @@ export default class DoubleDatePickerCalender extends React.Component {
     }
 
     /**
+     * disablePastDatesHandler-- Based on props disablePastDates, it decide which is the first active date of calender and dates before of that will be disabled
+     * @param {undefined} no parameters
+     * @return {Object or string} _disableDate-- return object in mode 2 otherwise empty string
+     */
+    disablePastDatesHandler = () => {
+        let _disableDate = {};
+        const _disablePastDatesMode = Number(this.props.disablePastDates.mode);
+        if (this.props.disablePastDates && _disablePastDatesMode) {
+            if (_disablePastDatesMode === 1) {
+                _disableDate = this.todayDateObj;
+            }
+            else if ((_disablePastDatesMode === 2) && this.props.disablePastDates.firstActiveDate) {
+                _disableDate = this.props.disablePastDates.firstActiveDate;
+            }
+        }
+        else {
+            _disableDate = ""
+        }
+
+        return _disableDate;
+    }
+
+    /**
      * defaultDateHandler --base on the defaultSelectedDate props initialize variable for first time rendering
      * @param {undefined} no parameters
      * @return {Object} -- properties --> defaultSelectedDateObj --> start date passed by user otherwise today date,selectedDateObj -->contain start and end date for selection ,selectedDateWithDateFormatObj contain start and end date in string
      */
     defaultDateHandler = () => {
+
         let _defaultSelectedDateObj = "",
             _selectedDateObj = "",
-            _selectedDateWithDateFormatObj = ""
+            _selectedDateWithDateFormatObj = "",
+            _startDate,
+            _endDate;
 
         if (this.props.defaultSelectedDate && this.props.defaultSelectedDate.startDate && this.datePickerMode.number !== 3) {
-            _defaultSelectedDateObj = {
-                date: this.props.defaultSelectedDate.startDate.date,
-                month: this.props.defaultSelectedDate.startDate.month,
-                year: this.props.defaultSelectedDate.startDate.year
-            };
             if (this.datePickerMode.number === 1) {
+                _startDate = this.dateComparator(this.disablePastDates, this.props.defaultSelectedDate.startDate, ">") ? this.disablePastDates : this.props.defaultSelectedDate.startDate;
+
                 _selectedDateObj = {
-                    startDate: this.props.defaultSelectedDate.startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                    startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                     endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                 };
                 // contain date in particular format
                 _selectedDateWithDateFormatObj = {
-                    startDate: this.dateFormatHandler(this.props.defaultSelectedDate.startDate, this.props.dateFormat),  // always string
+                    startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
                     endDate: ""    //always string
                 };
             } else {
-                const _endDate = this.props.defaultSelectedDate.endDate ? this.props.defaultSelectedDate.endDate : this.props.defaultSelectedDate.startDate;
+                if (this.props.defaultSelectedDate.endDate) {
+                    if (this.dateComparator(this.props.defaultSelectedDate.endDate, this.props.defaultSelectedDate.startDate, ">=")) {
+                        _startDate = this.props.defaultSelectedDate.startDate;
+                        _endDate = this.props.defaultSelectedDate.endDate;
+                    }
+                    else {
+                        _startDate = this.props.defaultSelectedDate.endDate;
+                        _endDate = this.props.defaultSelectedDate.startDate;
+                    }
+                }
+                else {
+                    _startDate = this.props.defaultSelectedDate.startDate;
+                    _endDate = _startDate;
+                }
+                _startDate = this.dateComparator(this.disablePastDates, _startDate, ">") ? this.disablePastDates : _startDate;
+
                 _selectedDateObj = {
-                    startDate: this.props.defaultSelectedDate.startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                    startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                     endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                 };
                 // contain date in particular format
                 _selectedDateWithDateFormatObj = {
-                    startDate: this.dateFormatHandler(this.props.defaultSelectedDate.startDate, this.props.dateFormat),  // always string
+                    startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
                     endDate: this.dateFormatHandler(_endDate, this.props.dateFormat)    //always string
                 };
             }
+            _defaultSelectedDateObj = _startDate;
+
         } else {
-            _defaultSelectedDateObj = {
-                date: this.todayDateObj.date,
-                month: this.todayDateObj.month,
-                year: this.todayDateObj.year
-            };
+            if (this.disablePastDates && this.dateComparator(this.disablePastDates, this.todayDateObj, ">")) {
+                _defaultSelectedDateObj = this.disablePastDates;
+
+            }
+            else {
+                _defaultSelectedDateObj = this.todayDateObj;
+            }
             _selectedDateObj = {
                 startDate: "", // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                 endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
@@ -106,7 +150,7 @@ export default class DoubleDatePickerCalender extends React.Component {
         }
 
         return {
-            defaultSelectedDateObj: _defaultSelectedDateObj,
+            defaultSelectedDateObj: _defaultSelectedDateObj,  // this property is used to display prticular month and yer during initial rendering
             selectedDateObj: _selectedDateObj,
             selectedDateWithDateFormatObj: _selectedDateWithDateFormatObj
         }
@@ -322,7 +366,7 @@ export default class DoubleDatePickerCalender extends React.Component {
             }
 
         }
-        if (this.props.disablePastDates && this.dateComparator(startDate, this.todayDateObj, "<")) {
+        if (this.disablePastDates && this.dateComparator(startDate, this.disablePastDates, "<")) {
             return {
                 class: `${_insideMonthClass} ${_disabledDateClass}`,
                 label: "Inactive past dates",
@@ -1333,7 +1377,17 @@ DoubleDatePickerCalender.propTypes = {
     hideResetButton: PropTypes.bool,
     hideApplyButton: PropTypes.bool,
     hideInputField: PropTypes.bool,
-    disablePastDates: PropTypes.bool,
+    disablePastDates: PropTypes.shape({
+        mode: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]),
+        firstActiveDate: PropTypes.shape({
+            date: PropTypes.number,
+            month: PropTypes.number,
+            year: PropTypes.number
+        })
+    }),
     applyCallBack: PropTypes.func,
     startDateCallBack: PropTypes.func,
     endDateCallBack: PropTypes.func,
