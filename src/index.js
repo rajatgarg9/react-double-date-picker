@@ -15,13 +15,13 @@ ReactDOM.render(<div><DoubleDatePickerCalender
     inputFieldEndDateText="End Date"
     applyBtnText="APPLY"
     resetBtnText="RESET"
-    disablePastDates={false}
+    disablePastDates={{mode:2,firstActiveDate:{date:18,month:1,year:2018}}}
     hideInputField={false}
     weekNamesLength="2"
     datePickerMode="2"
     yearDropDownList={{enable:true,startYear:1922,endYear:2999}}
     monthDropDownList={{enable:true}}
-    defaultSelectedDate={{startDate:{date:10,month:5,year:2019},endDate:{date:11,month:6,year:2019}}}
+    defaultSelectedDate={{startDate:{date:10,month:4,year:2018},endDate:{date:11,month:5,year:2018}}}
     /></div>, document.getElementById('root'));
      
 registerServiceWorker();
