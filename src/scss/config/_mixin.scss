@@ -1,18 +1,18 @@
-@mixin double-date-picker-heading-extra-bold() {
+@mixin double-date-picker-typography-extra-bold() {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: $dbl-date-picker-font-weight-extra-bold;
 }
 
-@mixin double-date-picker-heading-bold() {
+@mixin double-date-picker-typography-bold() {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: $dbl-date-picker-font-weight-bold;
 }
 
-@mixin double-date-picker-heading-normal() {
+@mixin double-date-picker-typography-normal() {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 14px;
     letter-spacing: 1px;

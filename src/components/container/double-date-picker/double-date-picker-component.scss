@@ -47,14 +47,14 @@
         margin-bottom: 20px;
     }
     &-month-year-name {
-        @include double-date-picker-heading-bold;
+        @include double-date-picker-typography-bold;
     }
     &-month-name {
         padding: 0 5px;
     }
     &-next-btn,
     &-previous-btn {
-        @include double-date-picker-heading-extra-bold;
+        @include double-date-picker-typography-extra-bold;
         line-height: 24px;
         transform: scale(1.3);
         border-radius: 50%;
@@ -85,7 +85,7 @@
     }
     &-day,
     &-day-name {
-        @include double-date-picker-heading-normal;
+        @include double-date-picker-typography-normal;
         width: 100%;
         height: 32px;
         display: inline-block;
@@ -150,7 +150,7 @@
     }
     &-reset-button,
     &-apply-button {
-        @include double-date-picker-heading-bold;
+        @include double-date-picker-typography-bold;
         cursor: pointer;
         color: $dbl-date-picker-white;
         background-color: $dbl-date-picker-dark-blue;
