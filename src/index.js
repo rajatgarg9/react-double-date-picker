@@ -15,6 +15,8 @@ ReactDOM.render(<div><DoubleDatePickerCalender
     inputFieldEndDateText="End Date"
     applyBtnText="APPLY"
     resetBtnText="RESET"
+    hideResetButton={false}
+    hideApplyButton={false}
     disablePastDates={{mode:2,firstActiveDate:{date:18,month:2,year:2018}}}
     disableFutureDates={{lastActiveDate:{date:11,month:6,year:2018}}}
     hideInputField={false}
@@ -22,7 +24,7 @@ ReactDOM.render(<div><DoubleDatePickerCalender
     datePickerMode="2"
     yearDropDownList={{enable:true,startYear:1922,endYear:2999}}
     monthDropDownList={{enable:true}}
-    defaultSelectedDate={{startDate:{date:11,month:5,year:2018},endDate:{date:11,month:6,year:2018}}}
+    defaultSelectedDate={{startDate:{day:5,date:11,month:5,year:2018},endDate:{day:1,date:11,month:6,year:2018}}}
     /></div>, document.getElementById('root'));
      
 registerServiceWorker();

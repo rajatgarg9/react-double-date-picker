@@ -6,6 +6,25 @@ export default class DoubleDatePickerCalender extends React.Component {
     constructor(props) {
         super(props);
 
+        this.InitialRenderingGlobalVariableSetup(); // Global Variable Setup
+
+        //this binding
+        this.dateSelectionHandler = this.dateSelectionHandler.bind(this);
+        this.monthCreater = this.monthCreater.bind(this);
+
+        //this.day = this.todayDateObj.day;
+        this.state = {
+            monthMarkup: this.monthCreater(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate), //create month for current month for initial rendering
+            popperShow: !this.inputFieldVisiblityHandler()
+        }
+    }
+
+    /**
+     * InitialRenderingGlobalVariableSetup -- on call initialise Global Variable
+     * @param {undefined} no param
+     * @return {undefined} no return 
+     */
+    InitialRenderingGlobalVariableSetup = () => {
         const _nameMappingObj = this.nameMapping(),  // mapping Name of months and week by props
             // decide single date picker , double date picker or simple calender 1 for single date picker , 
             // 2 for double date picker and 3 for simple calender with date picker
@@ -37,18 +56,8 @@ export default class DoubleDatePickerCalender extends React.Component {
         this.year = _defaultDateHandlerObj.defaultSelectedDateObj.year; //number
         this.selectedDateObj = _defaultDateHandlerObj.selectedDateObj; //object
         this.selectedDateWithDateFormatObj = _defaultDateHandlerObj.selectedDateWithDateFormatObj; //object
-
-
-        //this binding
-        this.dateSelectionHandler = this.dateSelectionHandler.bind(this);
-        this.monthCreater = this.monthCreater.bind(this);
-
-        //this.day = this.todayDateObj.day;
-        this.state = {
-            monthMarkup: this.monthCreater(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate), //create month for current month for initial rendering
-            popperShow: !this.inputFieldVisiblityHandler()
-        }
     }
+
 
     /**
      * disablePastDatesHandler-- Based on props disablePastDates, it decide which is the first active date of calender and dates before of that will be disabled
@@ -132,6 +141,12 @@ export default class DoubleDatePickerCalender extends React.Component {
                 startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                 endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
             };
+            
+            _selectedDateObj.startDate.day=this.weekNamesMapping[_selectedDateObj.startDate.day];
+            if( _selectedDateObj.endDate){
+                _selectedDateObj.endDate.day=this.weekNamesMapping[_selectedDateObj.endDate.day];
+            }
+
             // contain date in particular format
             _selectedDateWithDateFormatObj = {
                 startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
@@ -1057,19 +1072,10 @@ export default class DoubleDatePickerCalender extends React.Component {
             return null;
         }
 
-        this.selectedDateObj = {
-            startDate: "",
-            endDate: ""
-        };
-        this.selectedDateWithDateFormatObj = {
-            startDate: this.props.inputFieldStartDateText || "",
-            endDate: this.props.inputFieldEndDateText || ""
-        };
-        this.calenderHandler(this.todayDateObj.month, this.todayDateObj.year);
-        this.day = this.todayDateObj.day;
-        this.date = this.todayDateObj.date;
-        this.month = this.todayDateObj.month;
-        this.year = this.todayDateObj.year;
+        this.InitialRenderingGlobalVariableSetup();
+
+
+        this.calenderHandler(this.month, this.year, this.selectedDateObj.startDate, this.selectedDateObj.endDate)
 
         this.props.resetCallBack && this.props.resetCallBack();
     }
@@ -1084,7 +1090,12 @@ export default class DoubleDatePickerCalender extends React.Component {
             return null;
         }
 
-        this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj);
+        if(this.datePickerMode.number===1){
+            this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate,"", this.selectedDateObj);
+        }
+        else{
+            this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj);
+        }
     }
 
     /**
@@ -1341,8 +1352,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                                         </div>)
                                     }
                                     {
-                                        !this.props.hideApplyButton &&
-                                        (<div className="double-date-picker-calender-apply-button-wrapper" >
+                                        !this.props.hideApplyButton && (this.datePickerMode.number !== 3) &&                                        (<div className="double-date-picker-calender-apply-button-wrapper" >
                                             <button
                                                 className={(this.selectedDateObj.startDate) ?
                                                     "double-date-picker-calender-apply-button" :
