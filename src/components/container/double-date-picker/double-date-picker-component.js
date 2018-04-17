@@ -23,12 +23,15 @@ export default class DoubleDatePickerCalender extends React.Component {
             month: _dateObj.getMonth() + 1, //  month (1-12)
             year: _dateObj.getFullYear()
         };
-        this.disablePastDates = this.props.disablePastDates && this.disablePastDatesHandler(); //Object -- all the dates before this date will become disable
 
+        this.disablePastDates = this.props.disablePastDates && this.disablePastDatesHandler(); //Object -- all the dates before this date will become disable
+        this.disableFutureDates = this.props.disableFutureDates && this.disableFutureDatesHandler(); //Object -- all the dates after this date will become disable
 
         //defined here beacuse thie function need above variables
         const _defaultDateHandlerObj = this.defaultDateHandler();  //Object
 
+        this.disablePastDates = _defaultDateHandlerObj.disablePastDates; //will change in case of negative scenario
+        this.disableFutureDates = _defaultDateHandlerObj.disableFutureDates; //will change in case of negative scenario
 
         this.month = _defaultDateHandlerObj.defaultSelectedDateObj.month;  //number
         this.year = _defaultDateHandlerObj.defaultSelectedDateObj.year; //number
@@ -50,54 +53,66 @@ export default class DoubleDatePickerCalender extends React.Component {
     /**
      * disablePastDatesHandler-- Based on props disablePastDates, it decide which is the first active date of calender and dates before of that will be disabled
      * @param {undefined} no parameters
-     * @return {Object or string} _disableDate-- return object in mode 2 otherwise empty string
+     * @return {Object or string} _firstActiveDate-- return object in mode 2 or 1 otherwise empty string
      */
     disablePastDatesHandler = () => {
-        let _disableDate = {};
+        let _firstActiveDate = {};
         const _disablePastDatesMode = Number(this.props.disablePastDates.mode);
         if (this.props.disablePastDates && _disablePastDatesMode) {
             if (_disablePastDatesMode === 1) {
-                _disableDate = this.todayDateObj;
+                _firstActiveDate = this.todayDateObj;
             }
             else if ((_disablePastDatesMode === 2) && this.props.disablePastDates.firstActiveDate) {
-                _disableDate = this.props.disablePastDates.firstActiveDate;
+                _firstActiveDate = this.props.disablePastDates.firstActiveDate;
             }
         }
         else {
-            _disableDate = ""
+            _firstActiveDate = ""
         }
 
-        return _disableDate;
+        return _firstActiveDate;
+    }
+
+
+    /**
+     * disableFutureDatesHandler-- Based on props disableFutureDates, it decide which is the last active date of calender and dates after  that will be disabled
+     * @param {undefined} no parameters
+     * @return {Object or string} _firstActiveDate-- return object in case of valid date otherwise string
+     */
+    disableFutureDatesHandler = () => {
+        if (this.props.disableFutureDates.lastActiveDate && this.disablePastDates) {
+            return this.dateComparator(this.props.disableFutureDates.lastActiveDate, this.disablePastDates, ">=") ? this.props.disableFutureDates.lastActiveDate : "";
+        }
+        else {
+            return this.props.disableFutureDates.lastActiveDate
+        }
     }
 
     /**
      * defaultDateHandler --base on the defaultSelectedDate props initialize variable for first time rendering
      * @param {undefined} no parameters
-     * @return {Object} -- properties --> defaultSelectedDateObj --> start date passed by user otherwise today date,selectedDateObj -->contain start and end date for selection ,selectedDateWithDateFormatObj contain start and end date in string
+     * @return {Object} -- properties :- defaultSelectedDateObj --> start date passed by user otherwise today date,selectedDateObj -->contain start and end date for selection ,selectedDateWithDateFormatObj contain start and end date in string
+     *   _disablePastDates-->  changed disablePastDates in case of negative scenario ,_disableFutureDates--> changed disableFutureDates in case of negative scenario
      */
     defaultDateHandler = () => {
 
         let _defaultSelectedDateObj = "",
             _selectedDateObj = "",
             _selectedDateWithDateFormatObj = "",
-            _startDate,
-            _endDate;
+            _startDate = "",
+            _endDate = "",
+            _disablePastDates = this.disablePastDates,
+            _disableFutureDates = this.disableFutureDates;
 
         if (this.props.defaultSelectedDate && this.props.defaultSelectedDate.startDate && this.datePickerMode.number !== 3) {
             if (this.datePickerMode.number === 1) {
-                _startDate = this.disablePastDates && this.dateComparator(this.disablePastDates, this.props.defaultSelectedDate.startDate, ">") ? this.disablePastDates : this.props.defaultSelectedDate.startDate;
-
-                _selectedDateObj = {
-                    startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-                    endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-                };
-                // contain date in particular format
-                _selectedDateWithDateFormatObj = {
-                    startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
-                    endDate: ""    //always string
-                };
-            } else {
+                _startDate = this.props.defaultSelectedDate.startDate;
+            }
+            // mode 2
+            else {
                 if (this.props.defaultSelectedDate.endDate) {
+
+                    // for Negaitve scenario
                     if (this.dateComparator(this.props.defaultSelectedDate.endDate, this.props.defaultSelectedDate.startDate, ">=")) {
                         _startDate = this.props.defaultSelectedDate.startDate;
                         _endDate = this.props.defaultSelectedDate.endDate;
@@ -105,29 +120,36 @@ export default class DoubleDatePickerCalender extends React.Component {
                     else {
                         _startDate = this.props.defaultSelectedDate.endDate;
                         _endDate = this.props.defaultSelectedDate.startDate;
+
                     }
                 }
                 else {
                     _startDate = this.props.defaultSelectedDate.startDate;
                     _endDate = _startDate;
                 }
-                _startDate = this.disablePastDates && this.dateComparator(this.disablePastDates, _startDate, ">") ? this.disablePastDates : _startDate;
-
-                _selectedDateObj = {
-                    startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-                    endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-                };
-                // contain date in particular format
-                _selectedDateWithDateFormatObj = {
-                    startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
-                    endDate: this.dateFormatHandler(_endDate, this.props.dateFormat)    //always string
-                };
             }
+            _selectedDateObj = {
+                startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+                endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
+            };
+            // contain date in particular format
+            _selectedDateWithDateFormatObj = {
+                startDate: this.dateFormatHandler(_startDate, this.props.dateFormat),  // always string
+                endDate: this.dateFormatHandler(_endDate, this.props.dateFormat)    //always string
+            };
             _defaultSelectedDateObj = _startDate;
 
-        } else {
-            if (this.disablePastDates && this.dateComparator(this.disablePastDates, this.todayDateObj, ">")) {
-                _defaultSelectedDateObj = this.disablePastDates;
+
+            // change value of disablePastDates and disableFutureDates based on validation - for Negaitve scenario
+            _disablePastDates = _disablePastDates && this.dateComparator(_disablePastDates, _startDate, ">") ? "" : _disablePastDates;
+            _disableFutureDates = _disableFutureDates && _startDate && this.dateComparator(_disableFutureDates, _startDate, ">") ? _disableFutureDates : "";
+            _disableFutureDates = _disableFutureDates && _endDate && this.dateComparator(_endDate, _disableFutureDates, ">") ? "" : _disableFutureDates;
+
+        }
+        // when simple calender mode
+        else {
+            if (_disablePastDates && this.dateComparator(_disablePastDates, this.todayDateObj, ">")) {
+                _defaultSelectedDateObj = _disablePastDates;
 
             }
             else {
@@ -142,17 +164,14 @@ export default class DoubleDatePickerCalender extends React.Component {
                 startDate: this.props.inputFieldStartDateText || "",  // always string
                 endDate: this.props.inputFieldEndDateText || ""    //always string
             };
-
-            this.selectedDateObj = {
-                startDate: "", // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-                endDate: "" // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
-            };
         }
 
         return {
             defaultSelectedDateObj: _defaultSelectedDateObj,  // this property is used to display prticular month and yer during initial rendering
             selectedDateObj: _selectedDateObj,
-            selectedDateWithDateFormatObj: _selectedDateWithDateFormatObj
+            selectedDateWithDateFormatObj: _selectedDateWithDateFormatObj,
+            disablePastDates: _disablePastDates,
+            disableFutureDates: _disableFutureDates
         }
     }
 
@@ -374,6 +393,15 @@ export default class DoubleDatePickerCalender extends React.Component {
                 pressed: false
             }
         }
+        if (this.disableFutureDates && this.dateComparator(startDate, this.disableFutureDates, ">")) {
+            return {
+                class: `${_insideMonthClass} ${_disabledDateClass}`,
+                label: "Inactive past dates",
+                tabIndex: "-1",
+                pressed: false
+            }
+        }
+
         //this condition true only 1 time so for perfomance , added third condition
         if (!firstSelectedDate && !secondSelectedDate && startDate.date === this.todayDateObj.date && this.dateComparator(startDate, this.todayDateObj, "===")) {
             return {
@@ -1188,7 +1216,6 @@ export default class DoubleDatePickerCalender extends React.Component {
             return (<select
                 value={this.month}
                 className="double-date-picker-calender-month-name-dropdown"
-                role="listbox"
                 aria-label="months"
                 onChange={
                     (e) => {
@@ -1222,7 +1249,6 @@ export default class DoubleDatePickerCalender extends React.Component {
             return (<select
                 className="double-date-picker-calender-year-name-dropdown"
                 value={this.year}
-                role="listbox"
                 aria-label="years"
                 onChange={
                     (e) => {

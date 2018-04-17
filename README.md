@@ -34,7 +34,8 @@
 |monthDropDownList|Object|{enable:false}|We can change month from dropdown list of month. example for enable month dropdown {enable:true}. **Properties description** :- **enable** - if true then it will show dropdown default false |
 |datePickerMode| Number | 2 |1 for single date picker , 2 for double date picker and 3 for normal calender|
 |weekNamesLength|Number or String|2|decide the number of character of week name |
-|disablePastDates| Object | null | this props will disable past dates . It has 2 modes :-> **mode 1**:it will disable all dates before today date. **example:{mode:1}** , **mode 2**-> it disable all dates before the passed date(Object) by props.**example:{mode:2,firstActiveDate:{date:18,month:1,year:2018}}** |
+|disablePastDates| Object | null | This props will disable past dates . It has 2 modes :-> **mode 1** -> it will disable all dates before today date. **Example:{mode:1}** , **mode 2**-> it disable all dates before the passed date(Object) by props. **Example:{mode:2,firstActiveDate:{date:18,month:1,year:2018}}** |
+|disableFutureDates|Object|null| This props will disable future dates. **Example -> {lastActiveDate:{date:11,month:6,year:2018}}** |
 |applyBtnText|  String | Apply | text for Apply button|
 |hideApplyButton|  Boolean | false |if become true then Apply button will removed from DOM|
 |resetBtnText|  String | Reset |text for Reset button|
