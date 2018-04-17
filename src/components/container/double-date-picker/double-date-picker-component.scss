@@ -2,6 +2,11 @@
     &-wrapper {
         position: relative;
         text-align: center;
+        &.simple-calender-date-picker-mode{
+            .double-date-picker-calender-reset-button-wrapper{
+                margin: 0 auto;
+            }
+        }
     }
     &-input-wrapper {
         height: 32px;

@@ -45,7 +45,7 @@
 |inputFieldStartDateText| String | |text in input field when start date(first date) is not selected|
 |inputFieldEndDateText|  String |  |text in input field when end date(second Date) is not selected|
 |datesSeperatorSymbol|  String |-> |symbol separating start date(first date) an end date(second Date) in Input field |
-|defaultSelectedDate|Object|null| we can specify default selected date by this props. **Example: {startDate:{date:10,month:5,year:2019},endDate:{date:11,month:6,year:2019}}** , use start date only for single date picker(i.e datePickerMode=1) .This props will not work in Simple calender mode(i.e datePickerMode=3).For Double date picker(i.e datePickerMode=2) use both startDate and endDate.|
+|defaultSelectedDate|Object|null| we can specify default selected date by this props. **Example: {startDate:{day:5,date:11,month:5,year:2018},endDate:{day:1,date:11,month:6,year:2018}}** , use start date only for single date picker(i.e datePickerMode=1) .This props will not work in Simple calender mode(i.e datePickerMode=3).For Double date picker(i.e datePickerMode=2) use both startDate and endDate.|
 
 
 ### Methods
