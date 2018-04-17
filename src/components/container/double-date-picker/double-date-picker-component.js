@@ -141,10 +141,10 @@ export default class DoubleDatePickerCalender extends React.Component {
                 startDate: _startDate, // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
                 endDate: _endDate // if contain object  in format{day:--,date:--,month:--,year:--} otherwise empty string
             };
-            
-            _selectedDateObj.startDate.day=this.weekNamesMapping[_selectedDateObj.startDate.day];
-            if( _selectedDateObj.endDate){
-                _selectedDateObj.endDate.day=this.weekNamesMapping[_selectedDateObj.endDate.day];
+
+            _selectedDateObj.startDate.day = this.weekNamesMapping[_selectedDateObj.startDate.day];
+            if (_selectedDateObj.endDate) {
+                _selectedDateObj.endDate.day = this.weekNamesMapping[_selectedDateObj.endDate.day];
             }
 
             // contain date in particular format
@@ -809,19 +809,77 @@ export default class DoubleDatePickerCalender extends React.Component {
     }
 
     /**
+     * dateAdderSubtracter --> work only for 30 days addition and subtraction , it give new date with adding or sub days
+     * @param {Object} dateObj --> date object which need to be added or subtracted
+     * @param {Number} days --> Numbers of days need to be added or substracted
+     * @param {String} action --> + for addition and - for sub
+     * @return {Object} new date with addition or subtraction of days 
+     */
+    dateAdderSubtracter = (dateObj, days, action) => {
+        let _todalDays = this.daysInMonthFinder(dateObj.month, dateObj.year),
+            _variableDays,
+            _dateObj = { ...dateObj };
+
+        if (action === "-") {
+            if ((_variableDays = _dateObj.date - days) <= 0) {
+                if (this.month - 1 === 0) {
+                    _todalDays = this.daysInMonthFinder(_dateObj.month = 12, _dateObj.year -= 1);
+                    _dateObj.date = _todalDays + _variableDays;
+                }
+                else {
+                    _todalDays = this.daysInMonthFinder(_dateObj.month -= 1, _dateObj.year);
+                    _dateObj.date = _todalDays + _variableDays;
+                }
+
+            }
+            else {
+                _dateObj.date = _variableDays;
+            }
+            return _dateObj;
+        }
+        if (action === "+") {
+            if ((_variableDays = _dateObj.date + days) > _todalDays) {
+                if (this.month + 1 > 12) {
+                    _dateObj.date = _variableDays - _todalDays;
+                    _dateObj.month = 1;
+                    _dateObj.year += 1
+                }
+                else {
+                    _dateObj.date = _variableDays - _todalDays;
+                    _dateObj.month += 1;
+                }
+
+            }
+            else {
+                _dateObj.date = _variableDays;
+            }
+            return _dateObj;
+        }
+    }
+
+    /**
      * arrowKeyHandler -- on call manage focus on pressing arrow keys
      * @param {Object} event -- contain properties of triggered event
      * @return {Boolean} return true if arrow key is trigered otherwise false
      */
-    arrowKeyHandler = (event) => {
+    arrowKeyHandler = (event, selectedDate) => {
         const _eventCode = event.which || event.keyCode,
             _daysNodeArray = this.monthContainerRef.getElementsByClassName("double-date-picker-calender-current-month-day");
+        let _newDate,
+            _actionNode;
 
         //up key
         if (_eventCode === 38) {
-            const _node = _daysNodeArray[(Number(event.target.dataset["date"]) - 8)];
-            if (_node) {
-                _node.focus();
+            _actionNode = _daysNodeArray[(Number(event.target.dataset["date"]) - 8)];
+            if (this.disablePastDates) {
+                _newDate = this.dateAdderSubtracter(selectedDate, 7, "-");
+
+                if (this.dateComparator(this.disablePastDates, _newDate, ">")) {
+                    return true;
+                }
+            }
+            if (_actionNode) {
+                _actionNode.focus();
             }
             else {
                 // change key code so that previousMonthBtnHandler can create new month
@@ -836,9 +894,18 @@ export default class DoubleDatePickerCalender extends React.Component {
         }
         //down key
         if (_eventCode === 40) {
-            const _node = _daysNodeArray[(Number(event.target.dataset["date"])) + 6];
-            if (_node) {
-                _node.focus()
+            _actionNode = _daysNodeArray[(Number(event.target.dataset["date"])) + 6];
+
+            if (this.disableFutureDates) {
+                _newDate = this.dateAdderSubtracter(selectedDate, 7, "+");
+
+                if (this.dateComparator(this.disableFutureDates, _newDate, "<")) {
+                    return true;
+                }
+            }
+
+            if (_actionNode) {
+                _actionNode.focus()
             }
             else {
                 // change key code so that nextMonthBtnHandler can create new month
@@ -853,9 +920,17 @@ export default class DoubleDatePickerCalender extends React.Component {
         }
         //right key
         if (_eventCode === 39) {
-            const _node = _daysNodeArray[(Number(event.target.dataset["date"]))];
-            if (_node) {
-                _node.focus()
+            _actionNode = _daysNodeArray[(Number(event.target.dataset["date"]))];
+            if (this.disableFutureDates) {
+                _newDate = this.dateAdderSubtracter(selectedDate, 1, "+");
+
+                if (this.dateComparator(this.disableFutureDates, _newDate, "<")) {
+                    return true;
+                }
+            }
+
+            if (_actionNode) {
+                _actionNode.focus()
             }
             else {
                 // change key code so that nextMonthBtnHandler can create new month
@@ -871,9 +946,18 @@ export default class DoubleDatePickerCalender extends React.Component {
 
         //left key
         if (_eventCode === 37) {
-            const _node = _daysNodeArray[(Number(event.target.dataset["date"]) - 2)];
-            if (_node) {
-                _node.focus();
+            _actionNode = _daysNodeArray[(Number(event.target.dataset["date"]) - 2)];
+
+            if (this.disablePastDates) {
+                _newDate = this.dateAdderSubtracter(selectedDate, 1, "-");
+
+                if (this.dateComparator(this.disablePastDates, _newDate, ">")) {
+                    return true;
+                }
+            }
+
+            if (_actionNode) {
+                _actionNode.focus();
             }
             else {
                 // change key code so that previousMonthBtnHandler can create new month
@@ -1001,8 +1085,15 @@ export default class DoubleDatePickerCalender extends React.Component {
      */
     dateSelectionHandler = (event) => {
 
+        let _selectedDate = {
+            day: event.target.dataset["day"],
+            date: Number(event.target.dataset["date"]),
+            month: Number(event.target.dataset["month"]),
+            year: Number(event.target.dataset["year"])
+        };
+
         //handle arrow key actions
-        if (this.arrowKeyHandler(event)) {
+        if (this.arrowKeyHandler(event, _selectedDate)) {
             return null;
         }
         // validae if date selection event is triggered
@@ -1010,12 +1101,6 @@ export default class DoubleDatePickerCalender extends React.Component {
             return null;
         }
 
-        let _selectedDate = {
-            day: event.target.dataset["day"],
-            date: Number(event.target.dataset["date"]),
-            month: Number(event.target.dataset["month"]),
-            year: Number(event.target.dataset["year"])
-        };
         if (event.target.className.search(/\bdouble-date-picker-calender-current-month-day\b/i) !== -1) {
             this.datePickerDateLogic(_selectedDate);
             return null;
@@ -1090,10 +1175,10 @@ export default class DoubleDatePickerCalender extends React.Component {
             return null;
         }
 
-        if(this.datePickerMode.number===1){
-            this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate,"", this.selectedDateObj);
+        if (this.datePickerMode.number === 1) {
+            this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate, "", this.selectedDateObj);
         }
-        else{
+        else {
             this.props.applyCallBack && this.props.applyCallBack(this.selectedDateWithDateFormatObj.startDate, this.selectedDateWithDateFormatObj.endDate, this.selectedDateObj);
         }
     }
@@ -1352,7 +1437,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                                         </div>)
                                     }
                                     {
-                                        !this.props.hideApplyButton && (this.datePickerMode.number !== 3) &&                                        (<div className="double-date-picker-calender-apply-button-wrapper" >
+                                        !this.props.hideApplyButton && (this.datePickerMode.number !== 3) && (<div className="double-date-picker-calender-apply-button-wrapper" >
                                             <button
                                                 className={(this.selectedDateObj.startDate) ?
                                                     "double-date-picker-calender-apply-button" :
