@@ -216,7 +216,7 @@ export default class DoubleDatePickerCalender extends React.Component {
                 11: "November",
                 12: "December"
             };
-        };
+        }
         if (this.props.weekNamesMapping && Object.keys(this.props.weekNamesMapping).length === 7) {
             _monthMapping = this.props.weekNames
         }
@@ -288,9 +288,9 @@ export default class DoubleDatePickerCalender extends React.Component {
     leapYearFinder = (year) => {
         if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
     }
 
     /**
@@ -365,7 +365,7 @@ export default class DoubleDatePickerCalender extends React.Component {
      */
     daysNameCreater = () => {
         let _daysNameMarkUp = [],
-            _weekNamesLength = (Number(this.props.weekNamesLength) && !0) ? this.props.weekNamesLength : 2;
+            _weekNamesLength = (Number(this.props.weekNamesLength)) ? this.props.weekNamesLength : 2;
         for (const key in this.weekNamesMapping) {
             _daysNameMarkUp = [..._daysNameMarkUp, <span className="double-date-picker-calender-day-name" key={key}>{this.weekNamesMapping[key].trim().slice(0, _weekNamesLength)}</span>];
         }
@@ -1276,12 +1276,9 @@ export default class DoubleDatePickerCalender extends React.Component {
             _aria_label = this.selectedDateObj.startDate ?
                 `Selected Date is from ${this.ariaDateHandler(this.selectedDateObj.startDate)} to ${this.ariaDateHandler(this.selectedDateObj.endDate)}` :
                 "No Dates Selected";
-                if(this.selectedDateWithDateFormatObj.startDate){
-                    _value=`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol || "->"} ${this.selectedDateWithDateFormatObj.endDate}`;
-                }
-                else{
-                    _value=""
-                }
+            if (this.selectedDateWithDateFormatObj.startDate) {
+                _value = `${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol || "->"} ${this.selectedDateWithDateFormatObj.endDate}`;
+            }
             return {
                 label: _aria_label,
                 value: _value

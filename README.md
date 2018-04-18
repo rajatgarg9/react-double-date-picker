@@ -10,7 +10,7 @@
 </p>
 
 #### 2.Single date Picker mode
-In this mode user can select only one dates from same calender. <br/> 
+In this mode user can select only one dates from calender. <br/> 
 **Example:**  `<DoubleDatePickerCalender datePickerMode="1"/>;`
 
 <p align="center">
@@ -18,7 +18,7 @@ In this mode user can select only one dates from same calender. <br/>
 </p>
 
 #### 3.Simple Calender mode
-In this mode user will be able to select any date. It will behave as a simple calender without any date selection. <br/>
+In this mode user will not be able to select any date. It will behave as a simple calender without any date selection. <br/>
 **Example:**  `<DoubleDatePickerCalender datePickerMode="3"/>;`
 
 <p align="center">
