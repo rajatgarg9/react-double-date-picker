@@ -1260,7 +1260,8 @@ export default class DoubleDatePickerCalender extends React.Component {
      * @return {object} label contain aria label and value contain visible text for Input field
      */
     inputFieldDataHandler = () => {
-        let _aria_label = "";
+        let _aria_label = "",
+            _value = "";
         //for single date picker
         if (this.datePickerMode.number === 1) {
             _aria_label = this.selectedDateObj.startDate ?
@@ -1275,9 +1276,15 @@ export default class DoubleDatePickerCalender extends React.Component {
             _aria_label = this.selectedDateObj.startDate ?
                 `Selected Date is from ${this.ariaDateHandler(this.selectedDateObj.startDate)} to ${this.ariaDateHandler(this.selectedDateObj.endDate)}` :
                 "No Dates Selected";
+                if(this.selectedDateWithDateFormatObj.startDate){
+                    _value=`${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol || "->"} ${this.selectedDateWithDateFormatObj.endDate}`;
+                }
+                else{
+                    _value=""
+                }
             return {
                 label: _aria_label,
-                value: `${this.selectedDateWithDateFormatObj.startDate} ${this.props.datesSeperatorSymbol || "->"} ${this.selectedDateWithDateFormatObj.endDate}`
+                value: _value
             }
         }
     }
