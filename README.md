@@ -65,7 +65,7 @@ In this mode user will be able to select any date. It will behave as a simple ca
 ### Methods
 |Methods| Arguments | Description|
 |---------|------|--------|
-|startDateCallBack| NewStartDate: String , NewStartDateObject: Object{date:"",month:"",year:""} |It will execute when start Date(First Selected date) change. <br/> **Example:** startDateCallBack={(startDate,startDateObj)=>{console.log(`start Date : ${startDate}`) ; console.log(startDateObj)}}<br/>
+|startDateCallBack| NewStartDate: String , NewStartDateObject: Object{date:"",month:"",year:""} |It will execute when start Date(First Selected date) change. <br/> **Example:** `startDateCallBack={(startDate,startDateObj)=>{console.log(`start Date : ${startDate}`) ; console.log(startDateObj)}}`<br/>
 Depending upon date it will show result like this -> **start Date : <br/>05-11-2018<br/> {day: "Friday", date: 11, month: 6, year: 2018}**|
 |endDateCallBack| NewEndDate: String , NewEndDateObject: Object{date:"",month:"",year:""} |It will execute when end Date(Second Selected date) change . <br/> **Example:** endDateCallBack={(endDate,endDateObj)=>{console.log(`start Date : ${endDate}`) ; console.log(endDateObj)}}<br/>
 Depending upon date it will show result like this -> **start Date : <br/>06-11-2018<br/> {day: "Monday", date: 11, month: 6, year: 2018}**|
