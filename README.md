@@ -30,9 +30,9 @@ In this mode user will be able to select any date. It will behave as a simple ca
 
 
 ### How to run
-  * Install dependencies by **npm install**
-  * Start sever by **npm start**
-  * It take some time to start a server after it will automatically Run Server on http://localhost:3000/
+  * Install dependencies using command **npm install**
+  * Start server using command **npm start**
+  * It will take some time to start the server. When server will start, it will run on http://localhost:3000/
 
 
 
