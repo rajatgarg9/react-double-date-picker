@@ -1,6 +1,20 @@
-### Double date Picker
+### Date Picker
 
- Date Picker built with React.js . This plugin has three modes **single date picker** , **double date picker** and **simple calender without date selection**.
+ This Date Picker built with React.js . This plugin has three modes **single date picker** , **double date picker** and **simple calender without date selection**.
+
+
+ #### 1.Double date Picker mode
+  In this mode user can select two dates , start date and end Date, from same calender . 
+** Example:**  <DoubleDatePickerCalender datePickerMode="2"/>
+
+#### 2.Single date Picker mode
+In this mode user can select only one dates from same calender. <br/> 
+** Example:**  <DoubleDatePickerCalender datePickerMode="1"/>
+
+#### 3.Simple Calender mode
+In this mode user will be able to select any date. It will behave as a simple calender without any date selection.
+** Example:**  <DoubleDatePickerCalender datePickerMode="3"/>
+
 
 
 
