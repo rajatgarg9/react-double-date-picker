@@ -1,11 +1,9 @@
-### Date Picker
+### React Date Picker
 
  This Date Picker built with React.js . This plugin has three modes **single date picker** , **double date picker** and **simple calender without date selection**.
-
-
  #### 1.Double date Picker mode
   In this mode user can select two dates , start date and end Date, from same calender . <br/>
-**Example:**  &lt;DoubleDatePickerCalender datePickerMode="2"/&gt;
+**Example:**  `&lt;DoubleDatePickerCalender datePickerMode="2"/&gt;`
 
 <p align="center">
   <img src="./public/images/double-date-Picker.jpg" width="320"/>
@@ -13,7 +11,7 @@
 
 #### 2.Single date Picker mode
 In this mode user can select only one dates from same calender. <br/> 
-**Example:**  &lt;DoubleDatePickerCalender datePickerMode="1"/&gt;
+**Example:**  `&lt;DoubleDatePickerCalender datePickerMode="1"/&gt;`
 
 <p align="center">
   <img src="./public/images/single-date-Picker.jpg" width="320"/>
@@ -21,13 +19,20 @@ In this mode user can select only one dates from same calender. <br/>
 
 #### 3.Simple Calender mode
 In this mode user will be able to select any date. It will behave as a simple calender without any date selection. <br/>
-**Example:**  &lt;DoubleDatePickerCalender datePickerMode="3"/&gt;
+**Example:**  `&lt;DoubleDatePickerCalender datePickerMode="3"/&gt;`
 
 <p align="center">
   <img src="./public/images/simple-calender-mode.jpg" width="320"/>
 </p>
 
 
+### Why to use:
+This plugin has follwing advantages:
+* **Vast Scope ->** This Plugin contain 3 modes **i.e** single date picker, double date picker and simple calender  which is unique from others Plugin.
+* **Simplicity ->** This plugin is easy to use. You can tweak the functionality just by altering props.
+* **Native Approach ->** This plugin doesn't depend on any external library other than React JS.
+* **Performance -->** This Plugin is highly optimized, and is lighting fast.
+* **Light weight ->** This plugin is light weight as compare with other plugins and is packed with vast variety of functionalities.
 
 ### How to run
   * Install dependencies using command **npm install**
