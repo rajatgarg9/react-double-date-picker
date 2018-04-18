@@ -7,21 +7,27 @@
   In this mode user can select two dates , start date and end Date, from same calender . <br/>
 **Example:**  &lt;DoubleDatePickerCalender datePickerMode="2"/&gt;
 
+<p align="center">
+  <img src="./public/images/double-date-Picker.jpg" width="320"/>
+</p>
+
 #### 2.Single date Picker mode
 In this mode user can select only one dates from same calender. <br/> 
 **Example:**  &lt;DoubleDatePickerCalender datePickerMode="1"/&gt;
+
+<p align="center">
+  <img src="./public/images/single-date-Picker.jpg" width="320"/>
+</p>
 
 #### 3.Simple Calender mode
 In this mode user will be able to select any date. It will behave as a simple calender without any date selection. <br/>
 **Example:**  &lt;DoubleDatePickerCalender datePickerMode="3"/&gt;
 
-
-
-
 <p align="center">
-  <img src="./public/images/date-picker-normal-state.jpg" width="320"/>
-  <img src="./public/images/date-picker-selected-state.jpg" width="320"/>
+  <img src="./public/images/simple-calender-mode.jpg" width="320"/>
 </p>
+
+
 
 ### How to run
   * Install dependencies by **npm install**
@@ -65,7 +71,7 @@ In this mode user will be able to select any date. It will behave as a simple ca
 ### Methods
 |Methods| Arguments | Description|
 |---------|------|--------|
-|startDateCallBack| NewStartDate: String , NewStartDateObject: Object{date:"",month:"",year:""} |It will execute when start Date(First Selected date) change. <br/> **Example:** `startDateCallBack={(startDate,startDateObj)=>{console.log(`start Date : ${startDate}`) ; console.log(startDateObj)}}`<br/>Depending upon date it will show result like this -> **start Date : <br/>05-11-2018<br/> {day: "Friday", date: 11, month: 6, year: 2018}**|
+|startDateCallBack| NewStartDate: String , NewStartDateObject: Object{date:"",month:"",year:""} |It will execute when start Date(First Selected date) change. <br/> **Example:** startDateCallBack={(startDate,startDateObj)=>{console.log(`start Date : ${startDate}`) ; console.log(startDateObj)}}<br/>Depending upon date it will show result like this -> **start Date : <br/>05-11-2018<br/> {day: "Friday", date: 11, month: 6, year: 2018}**|
 |endDateCallBack| NewEndDate: String , NewEndDateObject: Object{date:"",month:"",year:""} |It will execute when end Date(Second Selected date) change . <br/> **Example:** endDateCallBack={(endDate,endDateObj)=>{console.log(`start Date : ${endDate}`) ; console.log(endDateObj)}}<br/>Depending upon date it will show result like this -> **start Date : <br/>06-11-2018<br/> {day: "Monday", date: 11, month: 6, year: 2018}**|
 |resetCallBack|None|function execute when Reset Button is clicked|
 |applyCallBack| StartDate: String ,  EndDate: String ,     DateObject: Object{startDate:{..} , endDate:{..}} | execute when Apply button is clicked.<br/> **Example:**applyCallBack={(startDate,endDate,dateObj) => console.log(startDate,endDate,dateObj)} <br/> Depending upon date it will show result like this->**05-11-2018 06-11-2018 {startDate: {day: "Friday", date: 11, month: 5, year: 2018}, endDate: {day: "Monday", date: 11, month: 6, year: 2018}}**|
